@@ -178,6 +178,44 @@ export const buildScenarioPatch = (
   selectedAgents: preset.selectedAgents,
 });
 
+const sameAgentSelections = (
+  a: AgentSelection[],
+  b: AgentSelection[],
+): boolean => {
+  if (a.length !== b.length) return false;
+  const sortedA = [...a].sort((x, y) => x.agentId.localeCompare(y.agentId));
+  const sortedB = [...b].sort((x, y) => x.agentId.localeCompare(y.agentId));
+  return sortedA.every((entry, i) => {
+    const other = sortedB[i];
+    return (
+      entry.agentId === other?.agentId &&
+      Math.round(entry.runsPerMonth) === Math.round(other?.runsPerMonth ?? NaN)
+    );
+  });
+};
+
+/**
+ * True when every input the scenario controls (license, paid users, admins,
+ * messages, agent intensity, agent picker selections) still matches the
+ * preset. Any user edit breaks the match so the chip's highlight disappears.
+ */
+export const matchesScenario = (
+  input: CalculatorInput,
+  preset: ScenarioPreset,
+): boolean => {
+  const inferred = inferQuickValuesFromInput(input);
+  return (
+    inferred.licenseProfile === preset.values.licenseProfile &&
+    Math.round(input.e5PaidUserLicenses) ===
+      Math.round(preset.values.paidE5Users) &&
+    Math.round(input.analystCount) === Math.round(preset.values.analystCount) &&
+    Math.round(input.messagesPerWorkday) ===
+      Math.round(preset.values.messagesPerWorkday) &&
+    inferred.agentIntensity === preset.values.agentIntensity &&
+    sameAgentSelections(input.selectedAgents, preset.selectedAgents)
+  );
+};
+
 export const inferQuickValuesFromInput = (
   input: CalculatorInput,
 ): QuickEstimateValues => {

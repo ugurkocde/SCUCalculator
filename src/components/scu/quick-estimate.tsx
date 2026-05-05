@@ -15,6 +15,7 @@ import {
   buildQuickInputPatch,
   buildScenarioPatch,
   inferQuickValuesFromInput,
+  matchesScenario,
   workloadSizeHint,
 } from "~/lib/scu/quick-presets";
 import { type CalculatorInput, type CalculatorOutput } from "~/lib/scu/types";
@@ -95,6 +96,9 @@ export const QuickEstimate = ({
     onChange(buildScenarioPatch(preset));
   };
 
+  const activeScenarioId =
+    SCENARIO_PRESETS.find((preset) => matchesScenario(input, preset))?.id ?? null;
+
   return (
     <section
       className="rounded-2xl border border-[color:var(--color-hairline)] bg-[color:var(--color-bg-raised)] p-6 sm:p-8 lg:p-10"
@@ -111,26 +115,42 @@ export const QuickEstimate = ({
       <fieldset className="mt-6">
         <legend className={labelEyebrow}>Start with an example</legend>
         <div className="mt-2 grid gap-2 sm:grid-cols-3">
-          {SCENARIO_PRESETS.map((preset) => (
-            <button
-              key={preset.id}
-              type="button"
-              onClick={() => {
-                applyScenario(preset);
-              }}
-              className="flex flex-col gap-0.5 rounded-lg border border-[color:var(--color-hairline)] bg-white/[0.01] px-3 py-2.5 text-left transition hover:border-[color:var(--color-accent)]/50 hover:bg-[color:var(--color-accent)]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
-            >
-              <span className="text-sm font-semibold text-[color:var(--color-text)]">
-                {preset.label}
-              </span>
-              <span className="text-[11px] text-[color:var(--color-text-subtle)]">
-                {preset.summary}
-              </span>
-            </button>
-          ))}
+          {SCENARIO_PRESETS.map((preset) => {
+            const selected = activeScenarioId === preset.id;
+            return (
+              <button
+                key={preset.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => {
+                  applyScenario(preset);
+                }}
+                className={`flex flex-col gap-0.5 rounded-lg border px-3 py-2.5 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)] ${
+                  selected
+                    ? "border-[color:var(--color-accent)]/60 bg-[color:var(--color-accent)]/[0.08] ring-1 ring-[color:var(--color-accent)]/30"
+                    : "border-[color:var(--color-hairline)] bg-white/[0.01] hover:border-[color:var(--color-accent)]/50 hover:bg-[color:var(--color-accent)]/[0.04]"
+                }`}
+              >
+                <span className="text-sm font-semibold text-[color:var(--color-text)]">
+                  {preset.label}
+                </span>
+                <span
+                  className={
+                    selected
+                      ? "text-[11px] text-[color:var(--color-text-muted)]"
+                      : "text-[11px] text-[color:var(--color-text-subtle)]"
+                  }
+                >
+                  {preset.summary}
+                </span>
+              </button>
+            );
+          })}
         </div>
         <p className="mt-2 text-[11px] text-[color:var(--color-text-subtle)]">
-          Loads typical inputs you can fine-tune below.
+          {activeScenarioId
+            ? "Tweak any input below to switch to custom values."
+            : "Loads typical inputs you can fine-tune below."}
         </p>
       </fieldset>
 

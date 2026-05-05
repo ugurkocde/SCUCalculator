@@ -9,6 +9,7 @@ import {
   buildQuickInputPatch,
   buildScenarioPatch,
   inferQuickValuesFromInput,
+  matchesScenario,
   workloadSizeHint,
 } from "~/lib/scu/quick-presets";
 
@@ -115,6 +116,39 @@ describe("SCENARIO_PRESETS", () => {
     const patch = buildScenarioPatch(enterprise);
     expect(patch.agentCount).toBe(0);
     expect(patch.selectedAgents?.length).toBeGreaterThan(0);
+  });
+});
+
+describe("matchesScenario", () => {
+  it("matches a freshly-applied preset for every scenario", () => {
+    for (const preset of SCENARIO_PRESETS) {
+      const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(preset) };
+      expect(matchesScenario(merged, preset)).toBe(true);
+    }
+  });
+
+  it("breaks the match as soon as the user edits any controlled input", () => {
+    const small = SCENARIO_PRESETS.find((p) => p.id === "small")!;
+    const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(small) };
+    const edited = { ...merged, analystCount: merged.analystCount + 1 };
+    expect(matchesScenario(edited, small)).toBe(false);
+  });
+
+  it("ignores selectedAgents ordering when comparing", () => {
+    const enterprise = SCENARIO_PRESETS.find((p) => p.id === "enterprise")!;
+    const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(enterprise) };
+    const reordered = {
+      ...merged,
+      selectedAgents: [...merged.selectedAgents].reverse(),
+    };
+    expect(matchesScenario(reordered, enterprise)).toBe(true);
+  });
+
+  it("does not match a different preset", () => {
+    const small = SCENARIO_PRESETS.find((p) => p.id === "small")!;
+    const enterprise = SCENARIO_PRESETS.find((p) => p.id === "enterprise")!;
+    const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(small) };
+    expect(matchesScenario(merged, enterprise)).toBe(false);
   });
 });
 

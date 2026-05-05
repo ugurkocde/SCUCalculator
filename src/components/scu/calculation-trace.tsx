@@ -1,7 +1,9 @@
 import { SECURITY_COPILOT_AGENTS } from "~/lib/scu/agents";
 import {
   HOURS_PER_MONTH,
+  SCU_PER_CHAT_MESSAGE,
   SCU_PER_USER_PER_MONTH,
+  WORKING_DAYS_PER_MONTH,
 } from "~/lib/scu/constants";
 import { type CalculatorInput, type CalculatorOutput } from "~/lib/scu/types";
 
@@ -80,12 +82,15 @@ const buildLines = (input: CalculatorInput): Line[] => {
       result: `${fmt(monthly, 0)} SCU/mo`,
     });
   } else {
-    const analystSCUperHour =
-      input.analystCount * input.promptsPerAnalystPerHour * input.scuPerPrompt;
+    const chatScuPerMonth =
+      input.analystCount *
+      input.messagesPerWorkday *
+      WORKING_DAYS_PER_MONTH *
+      SCU_PER_CHAT_MESSAGE;
     lines.push({
-      label: "Analyst workload",
-      expression: `${input.analystCount} × ${input.promptsPerAnalystPerHour} × ${input.scuPerPrompt} SCU = ${fmt(analystSCUperHour, 2)}/hr`,
-      result: `${fmt(analystSCUperHour * HOURS_PER_MONTH, 0)} SCU/mo`,
+      label: "Chat usage",
+      expression: `${input.analystCount} admins × ${input.messagesPerWorkday} msgs/admin/workday × ${WORKING_DAYS_PER_MONTH} days × ${SCU_PER_CHAT_MESSAGE} SCU`,
+      result: `${fmt(chatScuPerMonth, 0)} SCU/mo`,
     });
   }
 

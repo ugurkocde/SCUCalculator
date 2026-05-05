@@ -68,6 +68,12 @@ export const QuickEstimate = ({
     onChange(buildQuickInputPatch({ ...quick, analystCount: safe }, baseContext));
   };
 
+  const setMessages = (event: ChangeEvent<HTMLInputElement>): void => {
+    const next = event.currentTarget.valueAsNumber;
+    const safe = Number.isFinite(next) ? Math.max(0, Math.min(50, next)) : 0;
+    onChange(buildQuickInputPatch({ ...quick, messagesPerWorkday: safe }, baseContext));
+  };
+
   const setPaidUsers = (event: ChangeEvent<HTMLInputElement>): void => {
     const next = event.currentTarget.valueAsNumber;
     const safe = Number.isFinite(next) ? Math.max(0, next) : 0;
@@ -157,28 +163,60 @@ export const QuickEstimate = ({
             </label>
           ) : null}
 
-          <div className="space-y-2">
-            <label
-              className="flex flex-col gap-2 text-sm font-medium text-[color:var(--color-text)]"
-              htmlFor="quick-analysts"
-            >
-              <span className={labelEyebrow}>
-                {isE5 ? "3" : "2"}. Analysts using Security Copilot
-              </span>
-              <input
-                id="quick-analysts"
-                type="number"
-                inputMode="numeric"
-                min={1}
-                max={500}
-                step={1}
-                value={quick.analystCount}
-                onChange={setAnalysts}
-                className={inputClass}
-                disabled={input.userSplit !== null}
-                aria-disabled={input.userSplit !== null}
-              />
-              <span className="text-xs text-[color:var(--color-text-subtle)]">
+          <div className="space-y-3">
+            <fieldset className="space-y-2">
+              <legend className={labelEyebrow}>
+                {isE5 ? "3" : "2"}. Security Copilot chat admins
+              </legend>
+              <p className="text-xs text-[color:var(--color-text-subtle)]">
+                Admins using Copilot chat in the standalone portal or embedded
+                experiences (Defender, Entra, Intune, Purview).
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <label
+                  className="flex flex-col gap-1.5 text-sm font-medium text-[color:var(--color-text)]"
+                  htmlFor="quick-analysts"
+                >
+                  <span className="text-[10px] font-medium uppercase tracking-wide text-[color:var(--color-text-muted)]">
+                    Active admins
+                  </span>
+                  <input
+                    id="quick-analysts"
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    max={500}
+                    step={1}
+                    value={quick.analystCount}
+                    onChange={setAnalysts}
+                    className={inputClass}
+                    disabled={input.userSplit !== null}
+                    aria-disabled={input.userSplit !== null}
+                  />
+                </label>
+                <label
+                  className="flex flex-col gap-1.5 text-sm font-medium text-[color:var(--color-text)]"
+                  htmlFor="quick-msgs"
+                >
+                  <span className="text-[10px] font-medium uppercase tracking-wide text-[color:var(--color-text-muted)]">
+                    Messages per admin / workday
+                  </span>
+                  <input
+                    id="quick-msgs"
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    max={50}
+                    step={1}
+                    value={quick.messagesPerWorkday}
+                    onChange={setMessages}
+                    className={inputClass}
+                    disabled={input.userSplit !== null}
+                    aria-disabled={input.userSplit !== null}
+                  />
+                </label>
+              </div>
+              <p className="text-xs text-[color:var(--color-text-subtle)]">
                 {input.userSplit !== null ? (
                   <span className="text-[color:var(--color-text-muted)]">
                     Overridden by per-experience split below.
@@ -191,8 +229,19 @@ export const QuickEstimate = ({
                     · {sizeHint.description}
                   </>
                 )}
-              </span>
-            </label>
+              </p>
+              <p className="text-[11px] leading-relaxed text-[color:var(--color-text-subtle)]">
+                Each chat message is estimated at 0.25 SCU — calibrated below
+                Microsoft&apos;s 0.5 SCU incident-summarisation reference, since chat
+                prompts are typically lighter than full incident analysis.{" "}
+                <a
+                  href="/methodology#chat-rate"
+                  className="underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-[color:var(--color-accent-fg)]"
+                >
+                  why 0.25
+                </a>
+              </p>
+            </fieldset>
             <UserSplitFields input={input} onChange={onChange} />
           </div>
 

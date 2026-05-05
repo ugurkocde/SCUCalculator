@@ -39,11 +39,23 @@ describe("buildQuickInputPatch", () => {
     }
   });
 
-  it("produces a non-zero monthly cost for the default values", () => {
-    const patch = buildQuickInputPatch(QUICK_DEFAULT_VALUES);
+  it("produces a non-zero monthly cost when chat usage exceeds the included pool", () => {
+    // Defaults (8 users × 5 msgs × 22 × 0.25 = 220 SCU/mo) sit inside the pool ($0).
+    // Bump messages to push past the 400 SCU pool.
+    const patch = buildQuickInputPatch({
+      ...QUICK_DEFAULT_VALUES,
+      messagesPerWorkday: 20,
+    });
     const merged = { ...DEFAULT_INPUT, ...patch };
     const output = calculateScuEstimate(merged);
     expect(output.monthlyUsd).toBeGreaterThan(0);
+  });
+
+  it("produces zero monthly cost for the default values (within pool)", () => {
+    const patch = buildQuickInputPatch(QUICK_DEFAULT_VALUES);
+    const merged = { ...DEFAULT_INPUT, ...patch };
+    const output = calculateScuEstimate(merged);
+    expect(output.monthlyUsd).toBe(0);
   });
 
   it("yields a higher cost when intensity changes from none to many", () => {

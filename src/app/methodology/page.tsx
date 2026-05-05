@@ -47,7 +47,9 @@ export default function MethodologyPage() {
               SCU per month. Capped at 10,000 SCU per month.
             </li>
             <li>
-              <strong className="text-[color:var(--color-text)]">Workload</strong>: <code className="font-mono text-xs">analysts × prompts/hr × SCU/prompt + agents × runs/hr × SCU/run + background SCU/hr + selected agent picker contribution</code>.
+              <strong className="text-[color:var(--color-text)]">Workload</strong>:{" "}
+              <code className="font-mono text-xs">chat_admins × msgs_per_admin_per_workday × 22 working_days × 0.25 SCU + agent_picker contribution</code>{" "}
+              (when the per-experience split isn&apos;t active).
             </li>
             <li>
               <strong className="text-[color:var(--color-text)]">Billing month</strong>: 730 hours.{" "}
@@ -66,6 +68,46 @@ export default function MethodologyPage() {
               <code className="font-mono text-xs">provisioned_SCU/hr × provisioned_rate + max(0, consumed - provisioned) × overage_rate</code>.
             </li>
           </ul>
+        </section>
+
+        <section id="chat-rate" className="space-y-3 scroll-mt-16">
+          <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">
+            Where the 0.25 SCU/message rate comes from
+          </h2>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            Microsoft does not publish a per-prompt SCU rate. Their billing-math
+            example shows three illustrative operations:
+          </p>
+          <ul className="space-y-1 pl-5 text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            <li>
+              <strong className="text-[color:var(--color-text)]">Heavy prompt</strong>{" "}
+              (40-second execution): 3.0 SCU
+            </li>
+            <li>
+              <strong className="text-[color:var(--color-text)]">Incident summarization</strong>:
+              0.5 SCU
+            </li>
+            <li>
+              <strong className="text-[color:var(--color-text)]">Promptbook</strong>: 3.7 SCU
+            </li>
+          </ul>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            Microsoft labels these as &ldquo;Example billing scenarios&rdquo; — illustrative
+            for teaching the math, not benchmarks. Their FAQ says explicitly: <em>&ldquo;Because
+            every prompt and workflow varies in complexity, SCU consumption isn&apos;t
+            fixed.&rdquo;</em>
+          </p>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            This calculator anchors the chat-message rate at{" "}
+            <strong className="text-[color:var(--color-text)]">0.25 SCU per message</strong> —
+            half of the documented 0.5 SCU &ldquo;incident feature&rdquo; reference. The
+            reasoning: a single chat prompt is mechanically lighter than a full incident
+            summarization (which processes alerts, evidence, related entities). 0.25
+            sits in a defensible middle: heavier than &ldquo;trivial,&rdquo; lighter than the
+            documented incident reference. Real per-message consumption varies with
+            prompt complexity and entity scope; verify against your tenant&apos;s usage
+            dashboard.
+          </p>
         </section>
 
         <section id="provisioning" className="space-y-3 scroll-mt-16">

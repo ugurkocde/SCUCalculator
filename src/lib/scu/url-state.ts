@@ -121,6 +121,11 @@ export const decodeInputFromParams = (
     next.analystCount = analysts;
   }
 
+  const messages = parseNumber(params.get("mpd"));
+  if (messages !== undefined) {
+    next.messagesPerWorkday = messages;
+  }
+
   const agentCount = parseNumber(params.get("ac"));
   if (agentCount !== undefined) {
     next.agentCount = agentCount;
@@ -161,6 +166,11 @@ export const encodeInputToSearchString = (
   }
   if (Math.round(input.analystCount) !== Math.round(defaults.analystCount)) {
     params.set("an", String(Math.round(input.analystCount)));
+  }
+  if (
+    Math.round(input.messagesPerWorkday) !== Math.round(defaults.messagesPerWorkday)
+  ) {
+    params.set("mpd", String(Math.round(input.messagesPerWorkday)));
   }
   if (Math.round(input.agentCount) !== Math.round(defaults.agentCount)) {
     params.set("ac", String(Math.round(input.agentCount)));

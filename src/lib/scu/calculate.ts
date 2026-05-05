@@ -5,7 +5,9 @@ import {
   HOURS_PER_MONTH,
   HOURS_PER_YEAR,
   INCLUDED_POOL_BY_TIER,
+  SCU_PER_CHAT_MESSAGE,
   SCU_PER_USER_PER_MONTH,
+  WORKING_DAYS_PER_MONTH,
 } from "~/lib/scu/constants";
 import {
   type AgentSelection,
@@ -89,11 +91,19 @@ const getEffectiveConsumedScuPerHour = (input: CalculatorInput): number => {
 
   const splitActive = userSplitTotal(input.userSplit) > 0;
 
+  // Chat usage from users in the standalone portal + embedded experiences.
+  // Workday-based, not 24/7: users × messages/workday × 22 working days × 0.25 SCU/message.
+  // Converted to SCU/hour by dividing by HOURS_PER_MONTH so the existing pipeline (which
+  // multiplies by 730 hours) lands at the correct monthly figure.
+  const chatScuPerMonth =
+    sanitizeNumber(input.analystCount) *
+    sanitizeNumber(input.messagesPerWorkday) *
+    WORKING_DAYS_PER_MONTH *
+    SCU_PER_CHAT_MESSAGE;
+
   const analystLoad = splitActive
     ? userSplitScuPerHour(input.userSplit)
-    : sanitizeNumber(input.analystCount) *
-      sanitizeNumber(input.promptsPerAnalystPerHour) *
-      sanitizeNumber(input.scuPerPrompt);
+    : chatScuPerMonth / HOURS_PER_MONTH;
 
   const agentLoad =
     sanitizeNumber(input.agentCount) *

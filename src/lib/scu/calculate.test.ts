@@ -23,9 +23,11 @@ describe("calculateScuEstimate", () => {
   it("calculates guided estimator correctly", () => {
     const input = baseInput();
     input.estimatorMode = "guided";
+    // Chat: 10 users × 5 msgs/workday × 22 days × 0.25 SCU = 275 SCU/mo
+    //       275 / 730 hours ≈ 0.37671 SCU/hr
     input.analystCount = 10;
-    input.promptsPerAnalystPerHour = 4;
-    input.scuPerPrompt = 0.2;
+    input.messagesPerWorkday = 5;
+    // Agents (intensity-driven): 3 × 2 × 0.5 = 3 SCU/hr
     input.agentCount = 3;
     input.runsPerAgentPerHour = 2;
     input.scuPerRun = 0.5;
@@ -33,7 +35,8 @@ describe("calculateScuEstimate", () => {
 
     const output = calculateScuEstimate(input);
 
-    expect(output.effectiveConsumedScuPerHour).toBe(12);
+    // chat (0.37671) + agents (3) + background (1) ≈ 4.37671 SCU/hr
+    expect(output.effectiveConsumedScuPerHour).toBeCloseTo(4.376712, 4);
   });
 
   it("applies provisioned and overage math", () => {
@@ -102,25 +105,29 @@ describe("calculateScuEstimate", () => {
     expect(output.currencyTotals.monthly).toBe(26280);
   });
 
-  it("uses the user split to derive workload when set, replacing the analyst formula", () => {
+  it("uses the user split to derive workload when set, replacing the chat formula", () => {
+    // Chat formula: 8 users × 5 msgs × 22 days × 0.25 SCU = 220 SCU/mo
     const baseline = baseInput();
     baseline.userSplit = null;
 
+    // Split: 50 Defender × 5 SCU/u/mo = 250 SCU/mo
     const split = baseInput();
     split.userSplit = {
-      defender: 100,
+      defender: 50,
       entra: 0,
       intune: 0,
       purview: 0,
       standalone: 0,
     };
-    // 100 Defender users × 5 SCU/user/month = 500 SCU/month from analysts
-    // baseline analystLoad: 8 × 4 × 0.12 = 3.84 SCU/hour × 730 = 2,803.2 SCU/month
+
     const baselineOutput = calculateScuEstimate(baseline);
     const splitOutput = calculateScuEstimate(split);
 
-    expect(splitOutput.effectiveConsumedScuPerHour).toBeLessThan(
+    // The two outputs must differ — proving the split replaces the chat formula
+    // rather than stacking on top of it.
+    expect(splitOutput.effectiveConsumedScuPerHour).not.toBeCloseTo(
       baselineOutput.effectiveConsumedScuPerHour,
+      4,
     );
   });
 

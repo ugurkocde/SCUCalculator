@@ -64,6 +64,7 @@ export interface QuickEstimateValues {
   licenseProfile: QuickLicenseProfile;
   paidE5Users: number;
   analystCount: number;
+  messagesPerWorkday: number;
   agentIntensity: AgentIntensity;
 }
 
@@ -71,6 +72,7 @@ export const QUICK_DEFAULT_VALUES: QuickEstimateValues = {
   licenseProfile: "e5_or_e7",
   paidE5Users: 1000,
   analystCount: 8,
+  messagesPerWorkday: 5,
   agentIntensity: "none",
 };
 
@@ -95,6 +97,7 @@ export const buildQuickInputPatch = (
     e5PaidUserLicenses: Math.max(0, values.paidE5Users),
     estimatorMode: "guided",
     analystCount: Math.max(0, values.analystCount),
+    messagesPerWorkday: Math.max(0, values.messagesPerWorkday),
     agentCount: pickerOverrides ? 0 : intensity.agentCount,
   };
 };
@@ -112,6 +115,7 @@ export const inferQuickValuesFromInput = (
     licenseProfile,
     paidE5Users: input.e5PaidUserLicenses,
     analystCount: input.analystCount,
+    messagesPerWorkday: input.messagesPerWorkday,
     agentIntensity: intensity,
   };
 };

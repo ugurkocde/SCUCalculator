@@ -43,6 +43,7 @@ export interface CalculatorInput {
   analystCount: number;
   promptsPerAnalystPerHour: number;
   scuPerPrompt: number;
+  messagesPerWorkday: number;
   agentCount: number;
   runsPerAgentPerHour: number;
   scuPerRun: number;

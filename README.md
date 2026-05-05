@@ -97,7 +97,7 @@ Every number on the page is sourced or labelled. Highlights:
 - **E5 / E7 included pool**: `min(10,000, paid_E5_users / 1,000 × 400)` SCU per month — direct from [Microsoft Learn](https://learn.microsoft.com/copilot/security/security-copilot-inclusion).
 - **Overage rate**: `$6/SCU` from [Microsoft Learn](https://learn.microsoft.com/copilot/security/security-copilot-inclusion).
 - **Provisioned rate**: `$4/SCU/hour` from Microsoft's [pricing page](https://www.microsoft.com/en-us/security/pricing/microsoft-security-copilot).
-- **Agent SCU rates**: only the Conditional Access Optimization and Identity Risk Management agents have published per-run rates (both `<1 SCU/run`). All other agents default to `1 SCU/run` as a conservative upper bound, with a clear "Estimate" pill on the card. The `/methodology` page lists every source.
+- **Agent SCU rates**: only the Conditional Access Optimization and Identity Risk Management agents have published per-run rates (both documented as `<1 SCU/run on average`). All other agents default to `0.5 SCU/run` — anchored to Microsoft's incident-summarisation reference (0.5 SCU) used in the billing-math example — with a clear "Estimate" pill on the card. Defaults are calibrated for mid-market usage; very large enterprises will see higher runs/month volumes per agent. The `/methodology` page lists every source.
 - **The 3 / 0.5 / 3.7 SCU figures** are illustrative billing-math examples from Microsoft Learn, not benchmarks — the calculator surfaces this caveat instead of presenting them as typical rates.
 
 Real per-tenant consumption only lives in the [Security Copilot usage dashboard](https://securitycopilot.microsoft.com/usage-monitoring). This calculator is a planning tool, not a billing oracle.

@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sora), "Avenir Next", "Trebuchet MS", sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", monospace;
+
+  /* Surfaces — warm graphite (slight yellow tint) reads as paper-and-ink seriousness */
+  --color-bg-base: oklch(0.18 0.012 250);
+  --color-bg-raised: oklch(0.21 0.012 250);
+  --color-bg-sunken: oklch(0.15 0.010 250);
+
+  /* Borders */
+  --color-border: oklch(0.32 0.010 250 / 0.6);
+  --color-hairline: oklch(1 0 0 / 0.06);
+
+  /* Text — warm off-white reduces glare versus pure white */
+  --color-text: oklch(0.97 0.005 80);
+  --color-text-muted: oklch(0.68 0.008 80);
+  --color-text-subtle: oklch(0.52 0.008 80);
+
+  /* Accent — desaturated steel blue. Distinctive without being playful. */
+  --color-accent: oklch(0.72 0.14 230);
+  --color-accent-soft: oklch(0.72 0.14 230 / 0.18);
+  --color-accent-fg: oklch(0.92 0.06 230);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  background-image:
+    radial-gradient(
+      ellipse 1200px 600px at 50% -20%,
+      oklch(0.72 0.14 230 / 0.06),
+      transparent 60%
+    ),
+    linear-gradient(oklch(1 0 0 / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.025) 1px, transparent 1px);
+  background-size:
+    auto,
+    56px 56px,
+    56px 56px;
+  background-position:
+    top center,
+    -1px -1px,
+    -1px -1px;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.32 0.010 250 / 0.6) var(--color-bg-sunken);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

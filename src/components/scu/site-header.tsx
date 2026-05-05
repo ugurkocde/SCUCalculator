@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { LogoMark } from "~/components/scu/logo-mark";
+
 interface NavLink {
   href: string;
   label: string;
@@ -22,9 +24,7 @@ export const SiteHeader = () => {
           href="/"
           className="flex items-center gap-2.5 text-sm font-semibold text-[color:var(--color-text)] hover:text-[color:var(--color-accent-fg)]"
         >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[color:var(--color-accent)]/40 bg-[color:var(--color-accent)]/10 font-mono text-[10px] font-bold tracking-tight text-[color:var(--color-accent-fg)]">
-            SCU
-          </span>
+          <LogoMark size={28} title="SCU Calculator" />
           <span>SCU Calculator</span>
         </Link>
 

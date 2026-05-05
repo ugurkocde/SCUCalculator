@@ -4,6 +4,9 @@ Free Microsoft Security Copilot SCU (Security Compute Unit) cost calculator. Est
 
 > Live: https://scucalculator.com
 
+<img width="1185" height="951" alt="image" src="https://github.com/user-attachments/assets/0503b945-f127-48e1-bbf7-881506cc6737" />
+
+
 ## Why this exists
 
 Microsoft started auto-including SCUs in paid Microsoft 365 E5 and E7 licenses in November 2025. Buyers and license managers immediately had one question: **"what does going over the included pool cost me?"** Microsoft's own calculator at securitycopilot.microsoft.com/calculator is excellent at sizing provisioned capacity but requires an Azure login and frames the answer as a provisioned-vs-overage table — not as a single dollar number a CFO can read.

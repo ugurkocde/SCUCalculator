@@ -115,7 +115,7 @@ export const AgentPicker = ({ input, onChange }: AgentPickerProps) => {
           const selection = selectedById.get(agent.id);
           const enabled = Boolean(selection);
           const runs = selection?.runsPerMonth ?? agent.defaultRunsPerMonth;
-          const scuPerHour = (agent.scuPerRun * (enabled ? runs : 0)) / 730;
+          const scuPerMonth = agent.scuPerRun * (enabled ? runs : 0);
 
           return (
             <article
@@ -210,7 +210,7 @@ export const AgentPicker = ({ input, onChange }: AgentPickerProps) => {
                   <div className="flex flex-col gap-1 text-[11px] uppercase tracking-wide text-[color:var(--color-text-subtle)]">
                     Adds
                     <span className="font-mono text-xs tabular-nums text-[color:var(--color-text)]">
-                      {formatScu(scuPerHour)} SCU/hr
+                      {formatScu(scuPerMonth)} SCU/mo
                     </span>
                   </div>
                 </div>

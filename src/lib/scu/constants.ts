@@ -9,6 +9,7 @@ export const HOURS_PER_MONTH = 730;
 export const HOURS_PER_YEAR = 8760;
 export const WORKING_DAYS_PER_MONTH = 22;
 export const SCU_PER_CHAT_MESSAGE = 0.25;
+export const SCU_PER_AGENT_RUN = 0.5;
 export const E5_INCLUDED_SCU_PER_1000_USERS = 400;
 export const E5_INCLUDED_SCU_CAP = 10000;
 
@@ -39,8 +40,7 @@ export const DEFAULT_INPUT: CalculatorInput = {
   scuPerPrompt: 0.12,
   messagesPerWorkday: 5,
   agentCount: 0,
-  runsPerAgentPerHour: 3,
-  scuPerRun: 0.18,
+  runsPerAgentPerMonth: 100,
   backgroundScuPerHour: 0,
   selectedAgents: [],
 };

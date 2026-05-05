@@ -1,6 +1,7 @@
 import { SECURITY_COPILOT_AGENTS } from "~/lib/scu/agents";
 import {
   HOURS_PER_MONTH,
+  SCU_PER_AGENT_RUN,
   SCU_PER_CHAT_MESSAGE,
   WORKING_DAYS_PER_MONTH,
 } from "~/lib/scu/constants";
@@ -55,12 +56,12 @@ const buildLines = (input: CalculatorInput): Line[] => {
 
   // Intensity-preset agents (only when picker is empty)
   if (input.agentCount > 0) {
-    const intensitySCUperHour =
-      input.agentCount * input.runsPerAgentPerHour * input.scuPerRun;
+    const agentScuPerMonth =
+      input.agentCount * input.runsPerAgentPerMonth * SCU_PER_AGENT_RUN;
     lines.push({
       label: "Agents (intensity preset)",
-      expression: `${input.agentCount} × ${input.runsPerAgentPerHour} runs/hr × ${input.scuPerRun} SCU = ${fmt(intensitySCUperHour, 2)}/hr`,
-      result: `${fmt(intensitySCUperHour * HOURS_PER_MONTH, 0)} SCU/mo`,
+      expression: `${input.agentCount} agents × ${input.runsPerAgentPerMonth} runs/mo × ${SCU_PER_AGENT_RUN} SCU`,
+      result: `${fmt(agentScuPerMonth, 0)} SCU/mo`,
     });
   }
 

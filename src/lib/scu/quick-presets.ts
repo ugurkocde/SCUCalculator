@@ -138,12 +138,12 @@ export const SCENARIO_PRESETS: ScenarioPreset[] = [
   {
     id: "mid",
     label: "Mid-market",
-    summary: "1,500 E5 users · 10 admins · 2 agents",
+    summary: "1,000 E5 users · 12 admins · 2 agents",
     values: {
       licenseProfile: "e5_or_e7",
-      paidE5Users: 1500,
-      analystCount: 10,
-      messagesPerWorkday: 8,
+      paidE5Users: 1000,
+      analystCount: 12,
+      messagesPerWorkday: 10,
       agentIntensity: "few",
     },
     selectedAgents: [],

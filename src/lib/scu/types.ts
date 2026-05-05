@@ -37,8 +37,7 @@ export interface CalculatorInput {
   scuPerPrompt: number;
   messagesPerWorkday: number;
   agentCount: number;
-  runsPerAgentPerHour: number;
-  scuPerRun: number;
+  runsPerAgentPerMonth: number;
   backgroundScuPerHour: number;
   selectedAgents: AgentSelection[];
 }

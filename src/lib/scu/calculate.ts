@@ -5,6 +5,7 @@ import {
   HOURS_PER_MONTH,
   HOURS_PER_YEAR,
   INCLUDED_POOL_BY_TIER,
+  SCU_PER_AGENT_RUN,
   SCU_PER_CHAT_MESSAGE,
   WORKING_DAYS_PER_MONTH,
 } from "~/lib/scu/constants";
@@ -76,10 +77,14 @@ const getEffectiveConsumedScuPerHour = (input: CalculatorInput): number => {
 
   const analystLoad = chatScuPerMonth / HOURS_PER_MONTH;
 
-  const agentLoad =
+  // Intensity-preset agents: agentCount × runs/month × 0.5 SCU/run.
+  // Aligned with the per-agent picker (which also uses 0.5 SCU/run) instead
+  // of the legacy 24/7 hourly framing that overstated typical agent activity.
+  const agentScuPerMonth =
     sanitizeNumber(input.agentCount) *
-    sanitizeNumber(input.runsPerAgentPerHour) *
-    sanitizeNumber(input.scuPerRun);
+    sanitizeNumber(input.runsPerAgentPerMonth) *
+    SCU_PER_AGENT_RUN;
+  const agentLoad = agentScuPerMonth / HOURS_PER_MONTH;
 
   const pickerLoad = selectedAgentScuPerHour(input.selectedAgents);
 

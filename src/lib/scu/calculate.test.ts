@@ -27,16 +27,16 @@ describe("calculateScuEstimate", () => {
     //       275 / 730 hours ≈ 0.37671 SCU/hr
     input.analystCount = 10;
     input.messagesPerWorkday = 5;
-    // Agents (intensity-driven): 3 × 2 × 0.5 = 3 SCU/hr
+    // Agents (intensity-driven): 3 agents × 200 runs/mo × 0.5 SCU = 300 SCU/mo
+    //                            300 / 730 hours ≈ 0.41096 SCU/hr
     input.agentCount = 3;
-    input.runsPerAgentPerHour = 2;
-    input.scuPerRun = 0.5;
+    input.runsPerAgentPerMonth = 200;
     input.backgroundScuPerHour = 1;
 
     const output = calculateScuEstimate(input);
 
-    // chat (0.37671) + agents (3) + background (1) ≈ 4.37671 SCU/hr
-    expect(output.effectiveConsumedScuPerHour).toBeCloseTo(4.376712, 4);
+    // chat (0.37671) + agents (0.41096) + background (1) ≈ 1.78767 SCU/hr
+    expect(output.effectiveConsumedScuPerHour).toBeCloseTo(1.787671, 4);
   });
 
   it("applies provisioned and overage math", () => {

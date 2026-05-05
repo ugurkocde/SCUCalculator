@@ -51,7 +51,14 @@ export const metadata: Metadata = {
     images: ["/og.png"],
   },
   category: "technology",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-icon", sizes: "180x180" }],
+    shortcut: ["/favicon.ico"],
+  },
 };
 
 const sora = Sora({

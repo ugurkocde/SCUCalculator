@@ -184,14 +184,14 @@ export const ScuFlowDiagram = () => {
           that actually happen.
         </p>
 
-        <figure className="relative flex flex-col gap-3 rounded-xl border border-[color:var(--color-hairline)] bg-white/[0.02] p-4 pl-5 sm:pl-16 md:ml-auto md:max-w-sm">
+        <figure className="relative flex flex-col gap-3 rounded-xl border border-[color:var(--color-hairline)] bg-white/[0.02] p-5 md:ml-auto md:max-w-sm">
           <span
             aria-hidden="true"
-            className="absolute -left-2 top-3 font-serif text-4xl leading-none text-[color:var(--color-accent)]/40 sm:-left-1"
+            className="absolute left-3 top-1 font-serif text-4xl leading-none text-[color:var(--color-accent)]/40"
           >
             “
           </span>
-          <blockquote className="text-[13px] italic leading-relaxed text-[color:var(--color-text-muted)] sm:pr-2">
+          <blockquote className="pl-6 text-[13px] italic leading-relaxed text-[color:var(--color-text-muted)]">
             Most triage agents I&apos;ve seen in real tenants run well below 0.5
             SCU. It&apos;s a fair upper bound for planning — actual usage
             depends on the entities each run touches.

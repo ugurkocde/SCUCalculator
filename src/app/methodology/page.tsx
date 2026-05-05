@@ -134,12 +134,21 @@ export default function MethodologyPage() {
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">Agent SCU rate provenance</h2>
           <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
-            Microsoft has published per-run rates only for the Conditional Access Optimization
-            agent and the Identity Risk Management agent (both at less than 1 SCU per run on
-            average). For all other agents, this calculator uses 1 SCU/run as a conservative
-            upper bound. Agent cards in the calculator label each rate as either{" "}
-            <span className="text-emerald-200">Microsoft</span> or{" "}
-            <span className="text-amber-200">Estimate</span>.
+            Microsoft has published per-run rates only for the Conditional Access
+            Optimization Agent and the Identity Risk Management Agent — both documented
+            verbatim as &ldquo;On average, each agent run consumes less than one SCU&rdquo; on
+            Microsoft Learn. For every other agent, Microsoft explicitly does not publish a
+            per-run rate and instead points to the in-tenant Security Copilot usage
+            dashboard. This calculator defaults the unpublished agents to 0.5 SCU/run,
+            anchored to the incident-summarisation reference (0.5 SCU) used in Microsoft&apos;s
+            billing-math example, with the Threat Intelligence Briefing Agent at 3.7 SCU
+            (the promptbook reference). Agent cards label each rate as either{" "}
+            <span className="text-emerald-200">Microsoft</span> (documented) or{" "}
+            <span className="text-amber-200">Estimate</span> (anchored to the closest
+            Microsoft reference number). Earlier versions of this calculator used 1.0 SCU
+            as a conservative upper bound; that produced cost estimates roughly 2× the
+            consumption observed by Microsoft product teams in customer environments and
+            has been corrected.
           </p>
         </section>
 

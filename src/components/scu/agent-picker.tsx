@@ -104,8 +104,10 @@ export const AgentPicker = ({ input, onChange }: AgentPickerProps) => {
       <div className="border-t border-[color:var(--color-hairline)] px-5 pt-5 pb-5 sm:px-6 sm:pt-6 sm:pb-6">
       <p className="rounded-md border border-[color:var(--color-hairline)] bg-white/[0.02] p-3 text-xs text-[color:var(--color-text-subtle)]">
         Microsoft has not published per-run SCU rates for most agents. Defaults are
-        conservative upper bounds (1 SCU/run) so cost is not under-quoted. Verify against
-        your tenant&apos;s usage dashboard.
+        calibrated for mid-market usage and anchored to Microsoft&apos;s 0.5 SCU
+        incident-summarisation reference. Very large enterprises will see higher
+        runs/month volumes &mdash; adjust the runs field per agent. Verify against your
+        tenant&apos;s usage dashboard.
       </p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

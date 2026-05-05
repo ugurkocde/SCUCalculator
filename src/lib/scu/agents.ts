@@ -21,11 +21,11 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Defender O365",
     description:
       "Auto-triages user-reported phishing messages, classifying intent and prioritising real threats for the SOC.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "community-estimate",
     sourceNote:
-      "Microsoft has not published a per-run rate. 1.0 SCU is a conservative upper bound (verify in your tenant's usage dashboard).",
-    defaultRunsPerMonth: 5000,
+      "Microsoft does not publish a per-run rate; their Phishing Triage docs point to the in-tenant usage dashboard (\"cost per email processed\"). 0.5 SCU anchors to Microsoft's incident-summarisation reference in their billing-math example.",
+    defaultRunsPerMonth: 1000,
     docsUrl: "https://learn.microsoft.com/defender-xdr/phishing-triage-agent",
   },
   {
@@ -35,11 +35,11 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Defender XDR",
     description:
       "Reviews new alerts, summarises evidence, and proposes a verdict to reduce analyst time per incident.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "community-estimate",
     sourceNote:
-      "Microsoft has not published a per-run rate. 1.0 SCU is a conservative upper bound (verify in your tenant's usage dashboard).",
-    defaultRunsPerMonth: 2500,
+      "Microsoft does not publish a per-run rate; their Alert Triage docs point to the in-tenant usage dashboard. 0.5 SCU anchors to Microsoft's incident-summarisation reference (the underlying operation).",
+    defaultRunsPerMonth: 500,
     docsUrl: "https://learn.microsoft.com/defender-xdr/security-alert-triage-agent",
   },
   {
@@ -49,10 +49,10 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Entra",
     description:
       "Scans Conditional Access policy gaps daily and proposes safe optimisations across users and apps.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "microsoft",
     sourceNote:
-      "Microsoft documents this agent at less than 1 SCU per run on average. Using 1.0 as the conservative upper bound.",
+      "Microsoft Learn states verbatim: \"On average, each agent run consumes less than one SCU.\" 0.5 used as the midpoint estimate.",
     defaultRunsPerMonth: 30,
     docsUrl:
       "https://learn.microsoft.com/entra/security-copilot/conditional-access-agent-optimization",
@@ -64,10 +64,10 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Entra ID Protection",
     description:
       "Investigates risky users in batches and recommends remediations such as resets, MFA, or session revocation.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "microsoft",
     sourceNote:
-      "Microsoft documents this agent at less than 1 SCU per run on average. Using 1.0 as the conservative upper bound.",
+      "Microsoft Learn states verbatim: \"On average, each agent run consumes less than one SCU.\" 0.5 used as the midpoint estimate.",
     defaultRunsPerMonth: 30,
     docsUrl:
       "https://learn.microsoft.com/entra/id-protection/identity-risk-management-agent-get-started",
@@ -79,11 +79,11 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Intune",
     description:
       "Continuously identifies vulnerable devices and drafts remediation tasks for endpoint admins.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "community-estimate",
     sourceNote:
-      "Microsoft has not published a per-run rate. 1.0 SCU is a conservative upper bound.",
-    defaultRunsPerMonth: 200,
+      "Microsoft does not publish a per-run rate. 0.5 SCU anchors to the incident-summarisation reference; verify against your tenant's usage dashboard.",
+    defaultRunsPerMonth: 100,
     docsUrl:
       "https://learn.microsoft.com/intune/copilot/agents/vulnerability-remediation-agent",
   },
@@ -94,10 +94,10 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Standalone",
     description:
       "Generates a tailored threat intelligence briefing for the tenant on a recurring schedule.",
-    scuPerRun: 4.0,
+    scuPerRun: 3.7,
     source: "community-estimate",
     sourceNote:
-      "Microsoft has not published a per-run rate. The agent runs as a promptbook; 4.0 SCU is a conservative upper bound matching the 3.7-SCU promptbook value used in Microsoft's billing-math example.",
+      "Microsoft does not publish a per-run rate. The agent runs as a promptbook; 3.7 SCU matches the value used for a promptbook run in Microsoft's billing-math example.",
     defaultRunsPerMonth: 4,
     docsUrl: "https://learn.microsoft.com/copilot/security/threat-intel-briefing-agent",
   },
@@ -108,11 +108,11 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Purview IRM",
     description:
       "Triages insider risk alerts by analysing recent user activity and surfacing the highest-risk cases.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "community-estimate",
     sourceNote:
-      "Microsoft documents that consumption depends on the number and type of alerts processed. 1.0 SCU is a conservative upper bound.",
-    defaultRunsPerMonth: 200,
+      "Microsoft documents that consumption depends on alert volume and type and points to the in-tenant usage dashboard. 0.5 SCU anchors to the incident-summarisation reference.",
+    defaultRunsPerMonth: 100,
     docsUrl:
       "https://learn.microsoft.com/purview/copilot-in-purview-triage-irm-agent-get-started",
   },
@@ -123,11 +123,11 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Purview DLP",
     description:
       "Reviews DLP alerts and prioritises real exposure incidents over noise.",
-    scuPerRun: 1.0,
+    scuPerRun: 0.5,
     source: "community-estimate",
     sourceNote:
-      "Microsoft documents that consumption depends on the number and type of alerts processed. 1.0 SCU is a conservative upper bound.",
-    defaultRunsPerMonth: 400,
+      "Microsoft documents that consumption depends on alert volume and type and points to the in-tenant usage dashboard. 0.5 SCU anchors to the incident-summarisation reference.",
+    defaultRunsPerMonth: 100,
     docsUrl:
       "https://learn.microsoft.com/purview/copilot-in-purview-triage-dlp-agent-get-started",
   },

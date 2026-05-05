@@ -39,7 +39,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     id: "phishing-triage-cost",
     question: "How many SCU does the Phishing Triage Agent consume?",
     answer:
-      "Microsoft has not published a per-run rate for the Phishing Triage Agent. Verify actual consumption in the Security Copilot usage dashboard at securitycopilot.microsoft.com/usage-monitoring. This calculator uses a conservative upper-bound estimate of 1.0 SCU per email triaged.",
+      "Microsoft has not published a per-run rate for the Phishing Triage Agent. Field reports from Microsoft product teams put it around 0.5 SCU per email triaged — the same as the incident-summarisation reference in Microsoft's billing-math example. This calculator uses 0.5 SCU as the default; verify against your tenant's usage dashboard.",
   },
   {
     id: "conditional-access-agent-cost",

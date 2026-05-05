@@ -1,21 +1,8 @@
-import { BUILD_DATE } from "~/lib/scu/constants";
-
 const AUTHOR_NAME = "Ugur Koc";
 const AUTHOR_BIO =
   "This calculator is open source and accepts pull requests.";
 const GITHUB_URL = "https://github.com/ugurkocde/scucalculator";
 const LINKEDIN_URL = "https://www.linkedin.com/in/ugurkocde/";
-
-const formatBuildDate = (raw: string): string => {
-  const [year, month, day] = raw.split("-").map(Number);
-  if (!year || !month || !day) return raw;
-  const date = new Date(Date.UTC(year, month - 1, day));
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
 
 export const SiteFooter = () => {
   return (
@@ -54,12 +41,6 @@ export const SiteFooter = () => {
           >
             View source on GitHub
           </a>
-          <p className="text-[color:var(--color-text-subtle)]">
-            Last updated{" "}
-            <time dateTime={BUILD_DATE} className="text-[color:var(--color-text-muted)]">
-              {formatBuildDate(BUILD_DATE)}
-            </time>
-          </p>
         </div>
       </div>
     </footer>

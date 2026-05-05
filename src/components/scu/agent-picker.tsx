@@ -204,6 +204,9 @@ export const AgentPicker = ({ input, onChange }: AgentPickerProps) => {
                       onChange={(event) => {
                         updateRuns(agent.id, event.currentTarget.valueAsNumber);
                       }}
+                      onFocus={(event) => {
+                        event.currentTarget.select();
+                      }}
                       className="rounded-md border border-[color:var(--color-hairline)] bg-[color:var(--color-bg-sunken)] px-2 py-1 font-mono text-xs text-[color:var(--color-text)] focus-visible:border-[color:var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
                     />
                   </label>

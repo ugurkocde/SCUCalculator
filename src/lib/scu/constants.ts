@@ -61,7 +61,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Security Copilot inclusion in Microsoft 365 E5 and E7",
     publisher: "Microsoft Learn",
     url: "https://learn.microsoft.com/copilot/security/security-copilot-inclusion",
-    publishedDate: "Microsoft Learn (accessed May 5, 2026)",
     description:
       "Canonical FAQ for the auto-inclusion program: rollout timeline, $6/SCU overage, scope, and confirmation that E3 is not part of the inclusion.",
   },
@@ -70,7 +69,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Microsoft Security Store",
     publisher: "Microsoft",
     url: "https://securitystore.microsoft.com",
-    publishedDate: "Catalog (accessed May 5, 2026)",
     description:
       "Official Security Store listing Microsoft and partner Security Copilot agents. Per-agent SCU consumption is published per listing where available.",
   },
@@ -79,7 +77,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Microsoft Security Copilot pricing",
     publisher: "Microsoft Security",
     url: "https://www.microsoft.com/en-us/security/pricing/microsoft-security-copilot",
-    publishedDate: "Pricing page (accessed Feb 7, 2026)",
     description:
       "Official pricing model and billing examples, including sample values of $4/SCU and $6/SCU in public documentation examples.",
   },
@@ -88,7 +85,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Get started with Security Copilot",
     publisher: "Microsoft Learn",
     url: "https://learn.microsoft.com/en-us/copilot/security/get-started-security-copilot",
-    publishedDate: "Microsoft Learn (accessed Feb 7, 2026)",
     description:
       "Current inclusion model reference: 400 included SCUs per 1,000 paid Microsoft 365 E5 users (up to 10,000), with purchase guidance constraints.",
   },
@@ -97,7 +93,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Manage Security Copilot usage and budget",
     publisher: "Microsoft Learn",
     url: "https://learn.microsoft.com/en-us/copilot/security/manage-usage?tabs=securitycomputeunits%2Cprovisioned",
-    publishedDate: "Microsoft Learn (accessed Feb 7, 2026)",
     description:
       "Capacity, overage billing behavior, and SCU monitoring guidance for budget control.",
   },
@@ -106,7 +101,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Security Copilot announcements at Ignite 2025",
     publisher: "Microsoft Security Blog",
     url: "https://www.microsoft.com/en-us/security/blog/2025/11/18/microsoft-security-copilot-announcements-at-microsoft-ignite-2025/",
-    publishedDate: "November 18, 2025",
     description:
       "Context on bundled M365 E5 and E5 Security experiences and general availability messaging.",
   },
@@ -115,7 +109,6 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Microsoft 365 Copilot Security included in E5",
     publisher: "Microsoft 365 Blog",
     url: "https://www.microsoft.com/en-us/microsoft-365/blog/2025/12/04/microsoft-365-copilot-security-is-now-included-in-microsoft-365-e5-and-e5-security/",
-    publishedDate: "December 4, 2025",
     description:
       "Official M365 announcement on E5/E5 Security inclusion and rollout context.",
   },
@@ -124,13 +117,10 @@ export const SCU_SOURCES: SourceReference[] = [
     title: "Estimate and monitor SCU use",
     publisher: "Microsoft Learn",
     url: "https://learn.microsoft.com/en-us/copilot/security/estimate-scu",
-    publishedDate: "Microsoft Learn (accessed Feb 7, 2026)",
     description:
       "Workload estimation methodology for analysts, prompts, and agent activity planning.",
   },
 ];
-
-export const LAST_VERIFIED_DATE = "February 7, 2026";
 
 const buildDateRaw = process.env.BUILD_DATE;
 export const BUILD_DATE: string =

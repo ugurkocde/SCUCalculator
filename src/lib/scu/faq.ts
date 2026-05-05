@@ -21,7 +21,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     id: "scus-included-in-e3",
     question: "Are SCUs included with Microsoft 365 E3?",
     answer:
-      "No. As of May 2026, Microsoft has only announced auto-included SCUs for Microsoft 365 E5 and E7. E3 subscriptions receive no included SCU and consumption is fully billable at the published overage rate.",
+      "No. Microsoft has only announced auto-included SCUs for Microsoft 365 E5 and E7. E3 subscriptions receive no included SCU and consumption is fully billable at the published overage rate.",
   },
   {
     id: "overage-rate",

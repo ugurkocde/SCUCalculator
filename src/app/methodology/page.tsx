@@ -2,7 +2,7 @@ import { type Metadata } from "next";
 import Link from "next/link";
 
 import { JsonLd } from "~/components/scu/json-ld";
-import { BUILD_DATE, LAST_VERIFIED_DATE, SCU_SOURCES, SITE_URL } from "~/lib/scu/constants";
+import { SCU_SOURCES, SITE_URL } from "~/lib/scu/constants";
 import { buildBreadcrumbLd } from "~/lib/scu/structured-data";
 
 export const metadata: Metadata = {
@@ -30,10 +30,6 @@ export default function MethodologyPage() {
           <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--color-text)] sm:text-5xl">
             How this calculator works
           </h1>
-          <p className="text-sm text-[color:var(--color-text-subtle)]">
-            Last verified {LAST_VERIFIED_DATE}. Build date{" "}
-            <time dateTime={BUILD_DATE}>{BUILD_DATE}</time>.
-          </p>
         </header>
 
         <section className="space-y-3">
@@ -191,7 +187,6 @@ export default function MethodologyPage() {
                   {source.title}
                 </Link>
                 <p className="mt-1 text-xs text-[color:var(--color-text-muted)]">{source.description}</p>
-                <p className="mt-1 text-[11px] text-[color:var(--color-text-subtle)]">{source.publishedDate}</p>
               </li>
             ))}
           </ul>

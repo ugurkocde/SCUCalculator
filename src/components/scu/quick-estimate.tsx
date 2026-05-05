@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChangeEvent } from "react";
+import { type ChangeEvent, type FocusEvent } from "react";
 
 import { CalculationTrace } from "~/components/scu/calculation-trace";
 import { CalculatorResults } from "~/components/scu/results";
@@ -38,6 +38,10 @@ const inputClass =
 
 const labelEyebrow =
   "text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--color-text-muted)]";
+
+const selectAllOnFocus = (event: FocusEvent<HTMLInputElement>): void => {
+  event.currentTarget.select();
+};
 
 export const QuickEstimate = ({
   input,
@@ -154,6 +158,7 @@ export const QuickEstimate = ({
                 step={100}
                 value={quick.paidE5Users}
                 onChange={setPaidUsers}
+                onFocus={selectAllOnFocus}
                 className={inputClass}
               />
               <span className="text-xs text-[color:var(--color-text-subtle)]">
@@ -188,6 +193,7 @@ export const QuickEstimate = ({
                     step={1}
                     value={quick.analystCount}
                     onChange={setAnalysts}
+                    onFocus={selectAllOnFocus}
                     className={inputClass}
                   />
                 </label>
@@ -207,6 +213,7 @@ export const QuickEstimate = ({
                     step={1}
                     value={quick.messagesPerWorkday}
                     onChange={setMessages}
+                    onFocus={selectAllOnFocus}
                     className={inputClass}
                   />
                 </label>

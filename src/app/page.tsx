@@ -3,7 +3,7 @@ import { type Metadata } from "next";
 import { CalculatorShell } from "~/components/scu/calculator-shell";
 import { HomeFaq } from "~/components/scu/home-faq";
 import { JsonLd } from "~/components/scu/json-ld";
-import { BUILD_DATE, SITE_URL } from "~/lib/scu/constants";
+import { SITE_URL } from "~/lib/scu/constants";
 import { FAQ_ENTRIES } from "~/lib/scu/faq";
 import {
   buildBreadcrumbLd,
@@ -24,17 +24,6 @@ export const metadata: Metadata = {
       "Free SCU cost estimator with the official E5 and E7 inclusion formula and Microsoft Security Store agent catalogue.",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "SCU Calculator" }],
   },
-};
-
-const formatBuildDate = (raw: string): string => {
-  const [year, month, day] = raw.split("-").map(Number);
-  if (!year || !month || !day) return raw;
-  const date = new Date(Date.UTC(year, month - 1, day));
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 };
 
 export default function HomePage() {
@@ -73,7 +62,7 @@ export default function HomePage() {
             SCU per month, capped at 10,000. The pool resets on the 1st of each month and
             unused SCUs do not roll over. Consumption beyond the pool bills as overage at
             $6 USD per SCU, billed at one-decimal precision. E3 is not part of the
-            inclusion as of May 2026 — see the{" "}
+            inclusion — see the{" "}
             <a
               href="https://learn.microsoft.com/copilot/security/security-copilot-inclusion"
               target="_blank"
@@ -95,10 +84,7 @@ export default function HomePage() {
         <HomeFaq />
 
         <p className="text-center text-xs text-[color:var(--color-text-subtle)]">
-          Sourced from Microsoft Learn · Last updated{" "}
-          <time dateTime={BUILD_DATE} className="text-[color:var(--color-text-muted)]">
-            {formatBuildDate(BUILD_DATE)}
-          </time>
+          Sourced from Microsoft Learn
         </p>
       </div>
     </main>

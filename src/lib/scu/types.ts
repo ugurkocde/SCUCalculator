@@ -77,6 +77,5 @@ export interface SourceReference {
   title: string;
   publisher: string;
   url: string;
-  publishedDate: string;
   description: string;
 }

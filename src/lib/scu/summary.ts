@@ -1,5 +1,4 @@
 import { SECURITY_COPILOT_AGENTS } from "~/lib/scu/agents";
-import { BUILD_DATE } from "~/lib/scu/constants";
 import {
   type CalculatorInput,
   type CalculatorOutput,
@@ -100,7 +99,6 @@ export const buildEmailSummary = (
   }
 
   lines.push(`Source: ${shareUrl}`);
-  lines.push(`Generated: ${BUILD_DATE}`);
 
   return lines.join("\n");
 };

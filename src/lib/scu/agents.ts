@@ -25,7 +25,7 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     source: "community-estimate",
     sourceNote:
       "Microsoft does not publish a per-run rate; their Phishing Triage docs point to the in-tenant usage dashboard (\"cost per email processed\"). 0.5 SCU anchors to Microsoft's incident-summarisation reference in their billing-math example.",
-    defaultRunsPerMonth: 1000,
+    defaultRunsPerMonth: 100,
     docsUrl: "https://learn.microsoft.com/defender-xdr/phishing-triage-agent",
   },
   {
@@ -39,7 +39,7 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     source: "community-estimate",
     sourceNote:
       "Microsoft does not publish a per-run rate; their Alert Triage docs point to the in-tenant usage dashboard. 0.5 SCU anchors to Microsoft's incident-summarisation reference (the underlying operation).",
-    defaultRunsPerMonth: 500,
+    defaultRunsPerMonth: 100,
     docsUrl: "https://learn.microsoft.com/defender-xdr/security-alert-triage-agent",
   },
   {

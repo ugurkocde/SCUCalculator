@@ -141,41 +141,6 @@ export default function MethodologyPage() {
           </p>
         </section>
 
-        <section id="user-split" className="space-y-3 scroll-mt-16">
-          <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">
-            Per-experience user rates
-          </h2>
-          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
-            Microsoft has not published per-user SCU consumption by experience. The optional
-            &ldquo;Refine by experience&rdquo; split applies these conservative rates per active user per
-            month, derived from observed usage patterns and Microsoft&apos;s billing-math
-            examples (which are illustrative, not benchmarks — verify against your tenant&apos;s
-            usage dashboard):
-          </p>
-          <ul className="space-y-1 pl-5 text-sm leading-relaxed text-[color:var(--color-text-muted)]">
-            <li>
-              <strong className="text-[color:var(--color-text)]">Standalone</strong>: 8 SCU/user/month — power users running interactive prompts and promptbooks
-            </li>
-            <li>
-              <strong className="text-[color:var(--color-text)]">Defender</strong>: 5 SCU/user/month — alert summaries, KQL hunting, incident triage
-            </li>
-            <li>
-              <strong className="text-[color:var(--color-text)]">Purview</strong>: 3 SCU/user/month — DLP and IRM alert review
-            </li>
-            <li>
-              <strong className="text-[color:var(--color-text)]">Entra</strong>: 1 SCU/user/month — occasional Conditional Access and identity-risk review
-            </li>
-            <li>
-              <strong className="text-[color:var(--color-text)]">Intune</strong>: 1 SCU/user/month — endpoint admin tasks (vulnerability remediation, policy review)
-            </li>
-          </ul>
-          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
-            When the per-experience split has any non-zero value, it replaces the analyst-driven
-            workload formula. Agent contribution (intensity preset or per-agent picker) and
-            background usage stack on top.
-          </p>
-        </section>
-
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">Agent SCU rate provenance</h2>
           <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">

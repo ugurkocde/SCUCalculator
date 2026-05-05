@@ -105,49 +105,6 @@ describe("calculateScuEstimate", () => {
     expect(output.currencyTotals.monthly).toBe(26280);
   });
 
-  it("uses the user split to derive workload when set, replacing the chat formula", () => {
-    // Chat formula: 8 users × 5 msgs × 22 days × 0.25 SCU = 220 SCU/mo
-    const baseline = baseInput();
-    baseline.userSplit = null;
-
-    // Split: 50 Defender × 5 SCU/u/mo = 250 SCU/mo
-    const split = baseInput();
-    split.userSplit = {
-      defender: 50,
-      entra: 0,
-      intune: 0,
-      purview: 0,
-      standalone: 0,
-    };
-
-    const baselineOutput = calculateScuEstimate(baseline);
-    const splitOutput = calculateScuEstimate(split);
-
-    // The two outputs must differ — proving the split replaces the chat formula
-    // rather than stacking on top of it.
-    expect(splitOutput.effectiveConsumedScuPerHour).not.toBeCloseTo(
-      baselineOutput.effectiveConsumedScuPerHour,
-      4,
-    );
-  });
-
-  it("ignores the user split when all five values are zero", () => {
-    const input = baseInput();
-    input.userSplit = {
-      defender: 0,
-      entra: 0,
-      intune: 0,
-      purview: 0,
-      standalone: 0,
-    };
-    const baselineOutput = calculateScuEstimate(baseInput());
-    const splitOutput = calculateScuEstimate(input);
-
-    expect(splitOutput.effectiveConsumedScuPerHour).toBe(
-      baselineOutput.effectiveConsumedScuPerHour,
-    );
-  });
-
   it("returns licensing warnings", () => {
     const e3 = baseInput();
     e3.licenseTier = "m365_e3";

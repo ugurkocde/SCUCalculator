@@ -6,7 +6,6 @@ import { CalculationTrace } from "~/components/scu/calculation-trace";
 import { CalculatorResults } from "~/components/scu/results";
 import { FxSelector } from "~/components/scu/fx";
 import { ShareActions } from "~/components/scu/share-actions";
-import { UserSplitFields } from "~/components/scu/user-split";
 import {
   AGENT_INTENSITY_PRESETS,
   type AgentIntensity,
@@ -190,8 +189,6 @@ export const QuickEstimate = ({
                     value={quick.analystCount}
                     onChange={setAnalysts}
                     className={inputClass}
-                    disabled={input.userSplit !== null}
-                    aria-disabled={input.userSplit !== null}
                   />
                 </label>
                 <label
@@ -211,24 +208,14 @@ export const QuickEstimate = ({
                     value={quick.messagesPerWorkday}
                     onChange={setMessages}
                     className={inputClass}
-                    disabled={input.userSplit !== null}
-                    aria-disabled={input.userSplit !== null}
                   />
                 </label>
               </div>
               <p className="text-xs text-[color:var(--color-text-subtle)]">
-                {input.userSplit !== null ? (
-                  <span className="text-[color:var(--color-text-muted)]">
-                    Overridden by per-experience split below.
-                  </span>
-                ) : (
-                  <>
-                    <span className="font-mono text-[color:var(--color-text-muted)]">
-                      {sizeHint.label}
-                    </span>{" "}
-                    · {sizeHint.description}
-                  </>
-                )}
+                <span className="font-mono text-[color:var(--color-text-muted)]">
+                  {sizeHint.label}
+                </span>{" "}
+                · {sizeHint.description}
               </p>
               <p className="text-[11px] leading-relaxed text-[color:var(--color-text-subtle)]">
                 Each chat message is estimated at 0.25 SCU — calibrated below
@@ -242,7 +229,6 @@ export const QuickEstimate = ({
                 </a>
               </p>
             </fieldset>
-            <UserSplitFields input={input} onChange={onChange} />
           </div>
 
           <fieldset>

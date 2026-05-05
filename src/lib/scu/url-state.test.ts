@@ -44,43 +44,6 @@ describe("URL state codec", () => {
     expect(decoded.analystCount).toBe(DEFAULT_INPUT.analystCount);
   });
 
-  it("round-trips a non-zero user split", () => {
-    const input = {
-      ...DEFAULT_INPUT,
-      userSplit: {
-        defender: 50,
-        entra: 0,
-        intune: 200,
-        purview: 10,
-        standalone: 5,
-      },
-    };
-    const params = new URLSearchParams(
-      encodeInputToSearchString(input, DEFAULT_INPUT),
-    );
-    const decoded = decodeInputFromParams(params, DEFAULT_INPUT);
-    expect(decoded.userSplit).not.toBeNull();
-    expect(decoded.userSplit?.defender).toBe(50);
-    expect(decoded.userSplit?.intune).toBe(200);
-    expect(decoded.userSplit?.standalone).toBe(5);
-    expect(decoded.userSplit?.entra).toBe(0);
-  });
-
-  it("does not encode an empty user split", () => {
-    const input = {
-      ...DEFAULT_INPUT,
-      userSplit: {
-        defender: 0,
-        entra: 0,
-        intune: 0,
-        purview: 0,
-        standalone: 0,
-      },
-    };
-    const search = encodeInputToSearchString(input, DEFAULT_INPUT);
-    expect(search).not.toContain("us=");
-  });
-
   it("maps E3 license to no-pool included tier", () => {
     const params = new URLSearchParams("lp=e3");
     const decoded = decodeInputFromParams(params, DEFAULT_INPUT);

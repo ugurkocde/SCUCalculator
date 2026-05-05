@@ -43,25 +43,7 @@ export const DEFAULT_INPUT: CalculatorInput = {
   scuPerRun: 0.18,
   backgroundScuPerHour: 0,
   selectedAgents: [],
-  userSplit: null,
 };
-
-/**
- * Estimated SCU consumption per active user per month, by Security Copilot experience.
- *
- * Microsoft has not published per-experience consumption rates. These are conservative
- * estimates derived from observed usage patterns and Microsoft Learn's billing-math
- * examples (which use a hypothetical prompt at 3 SCU, an incident summary at 0.5 SCU,
- * and a promptbook at 3.7 SCU as teaching scenarios — not as benchmarks). Verify against
- * your tenant's usage dashboard.
- */
-export const SCU_PER_USER_PER_MONTH = {
-  defender: 5,
-  standalone: 8,
-  purview: 3,
-  intune: 1,
-  entra: 1,
-} as const;
 
 export const CURRENCIES: { code: CurrencyCode; label: string }[] = [
   { code: "USD", label: "US Dollar" },

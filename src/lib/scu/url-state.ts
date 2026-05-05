@@ -3,7 +3,6 @@ import {
   type AgentSelection,
   type CalculatorInput,
   type CurrencyCode,
-  type UserSplit,
 } from "~/lib/scu/types";
 
 const KNOWN_AGENT_IDS = new Set(SECURITY_COPILOT_AGENTS.map((agent) => agent.id));
@@ -64,40 +63,6 @@ const encodeAgents = (selections: AgentSelection[]): string =>
     .map((entry) => `${entry.agentId}:${Math.round(entry.runsPerMonth)}`)
     .join(",");
 
-const SPLIT_KEYS: Array<keyof UserSplit> = [
-  "defender",
-  "entra",
-  "intune",
-  "purview",
-  "standalone",
-];
-
-const parseUserSplit = (raw: string | null): UserSplit | undefined => {
-  if (!raw) return undefined;
-  const next: UserSplit = {
-    defender: 0,
-    entra: 0,
-    intune: 0,
-    purview: 0,
-    standalone: 0,
-  };
-  let touched = false;
-  for (const entry of raw.split(",").filter(Boolean)) {
-    const [key, valueRaw] = entry.split(":");
-    if (!key || !SPLIT_KEYS.includes(key as keyof UserSplit)) continue;
-    const value = Number(valueRaw);
-    if (!Number.isFinite(value) || value < 0) continue;
-    next[key as keyof UserSplit] = Math.round(value);
-    touched = true;
-  }
-  return touched ? next : undefined;
-};
-
-const encodeUserSplit = (split: UserSplit): string =>
-  SPLIT_KEYS.filter((key) => split[key] > 0)
-    .map((key) => `${key}:${Math.round(split[key])}`)
-    .join(",");
-
 export const decodeInputFromParams = (
   params: URLSearchParams,
   fallback: CalculatorInput,
@@ -141,11 +106,6 @@ export const decodeInputFromParams = (
     next.selectedAgents = agents;
   }
 
-  const userSplit = parseUserSplit(params.get("us"));
-  if (userSplit) {
-    next.userSplit = userSplit;
-  }
-
   return next;
 };
 
@@ -180,12 +140,6 @@ export const encodeInputToSearchString = (
   }
   if (input.selectedAgents.length > 0) {
     params.set("agents", encodeAgents(input.selectedAgents));
-  }
-  if (input.userSplit) {
-    const encoded = encodeUserSplit(input.userSplit);
-    if (encoded.length > 0) {
-      params.set("us", encoded);
-    }
   }
   return params.toString();
 };

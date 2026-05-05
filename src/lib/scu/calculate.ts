@@ -6,7 +6,6 @@ import {
   HOURS_PER_YEAR,
   INCLUDED_POOL_BY_TIER,
   SCU_PER_CHAT_MESSAGE,
-  SCU_PER_USER_PER_MONTH,
   WORKING_DAYS_PER_MONTH,
 } from "~/lib/scu/constants";
 import {
@@ -14,7 +13,6 @@ import {
   type CalculatorInput,
   type CalculatorOutput,
   type ProvisionedRecommendation,
-  type UserSplit,
 } from "~/lib/scu/types";
 
 const sanitizeNumber = (value: number): number => {
@@ -47,28 +45,6 @@ const getIncludedScuMonthly = (input: CalculatorInput): number => {
   return INCLUDED_POOL_BY_TIER[input.includedPoolTier];
 };
 
-export const userSplitTotal = (split: UserSplit | null | undefined): number => {
-  if (!split) return 0;
-  return (
-    sanitizeNumber(split.defender) +
-    sanitizeNumber(split.entra) +
-    sanitizeNumber(split.intune) +
-    sanitizeNumber(split.purview) +
-    sanitizeNumber(split.standalone)
-  );
-};
-
-export const userSplitScuPerHour = (split: UserSplit | null | undefined): number => {
-  if (!split) return 0;
-  const monthly =
-    sanitizeNumber(split.defender) * SCU_PER_USER_PER_MONTH.defender +
-    sanitizeNumber(split.entra) * SCU_PER_USER_PER_MONTH.entra +
-    sanitizeNumber(split.intune) * SCU_PER_USER_PER_MONTH.intune +
-    sanitizeNumber(split.purview) * SCU_PER_USER_PER_MONTH.purview +
-    sanitizeNumber(split.standalone) * SCU_PER_USER_PER_MONTH.standalone;
-  return monthly / HOURS_PER_MONTH;
-};
-
 export const selectedAgentScuPerHour = (selections: AgentSelection[] | undefined): number => {
   if (!selections || selections.length === 0) {
     return 0;
@@ -89,21 +65,16 @@ const getEffectiveConsumedScuPerHour = (input: CalculatorInput): number => {
     return sanitizeNumber(input.consumedScuPerHour);
   }
 
-  const splitActive = userSplitTotal(input.userSplit) > 0;
-
-  // Chat usage from users in the standalone portal + embedded experiences.
-  // Workday-based, not 24/7: users × messages/workday × 22 working days × 0.25 SCU/message.
-  // Converted to SCU/hour by dividing by HOURS_PER_MONTH so the existing pipeline (which
-  // multiplies by 730 hours) lands at the correct monthly figure.
+  // Chat usage: admins × messages/workday × 22 working days × 0.25 SCU/message.
+  // Divided by HOURS_PER_MONTH so the pipeline (which re-multiplies by 730) lands
+  // on the correct monthly figure.
   const chatScuPerMonth =
     sanitizeNumber(input.analystCount) *
     sanitizeNumber(input.messagesPerWorkday) *
     WORKING_DAYS_PER_MONTH *
     SCU_PER_CHAT_MESSAGE;
 
-  const analystLoad = splitActive
-    ? userSplitScuPerHour(input.userSplit)
-    : chatScuPerMonth / HOURS_PER_MONTH;
+  const analystLoad = chatScuPerMonth / HOURS_PER_MONTH;
 
   const agentLoad =
     sanitizeNumber(input.agentCount) *

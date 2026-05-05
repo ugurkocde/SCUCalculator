@@ -19,14 +19,6 @@ export interface AgentSelection {
   runsPerMonth: number;
 }
 
-export interface UserSplit {
-  defender: number;
-  entra: number;
-  intune: number;
-  purview: number;
-  standalone: number;
-}
-
 export interface CalculatorInput {
   mode: CalculationMode;
   licenseTier: LicenseTier;
@@ -49,7 +41,6 @@ export interface CalculatorInput {
   scuPerRun: number;
   backgroundScuPerHour: number;
   selectedAgents: AgentSelection[];
-  userSplit: UserSplit | null;
 }
 
 export interface CurrencyTotals {

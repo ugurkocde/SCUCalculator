@@ -2,7 +2,6 @@ import { SECURITY_COPILOT_AGENTS } from "~/lib/scu/agents";
 import {
   HOURS_PER_MONTH,
   SCU_PER_CHAT_MESSAGE,
-  SCU_PER_USER_PER_MONTH,
   WORKING_DAYS_PER_MONTH,
 } from "~/lib/scu/constants";
 import { type CalculatorInput, type CalculatorOutput } from "~/lib/scu/types";
@@ -43,56 +42,16 @@ interface Line {
 const buildLines = (input: CalculatorInput): Line[] => {
   const lines: Line[] = [];
 
-  const splitTotal: number = input.userSplit
-    ? (Object.values(input.userSplit) as number[]).reduce(
-        (sum, n) => sum + (n ?? 0),
-        0,
-      )
-    : 0;
-  const splitActive = splitTotal > 0;
-
-  // Workload: analysts (or per-experience split)
-  if (splitActive && input.userSplit) {
-    const split = input.userSplit;
-    const parts: string[] = [];
-    let monthly = 0;
-    if (split.defender > 0) {
-      parts.push(`${split.defender}d×${SCU_PER_USER_PER_MONTH.defender}`);
-      monthly += split.defender * SCU_PER_USER_PER_MONTH.defender;
-    }
-    if (split.standalone > 0) {
-      parts.push(`${split.standalone}s×${SCU_PER_USER_PER_MONTH.standalone}`);
-      monthly += split.standalone * SCU_PER_USER_PER_MONTH.standalone;
-    }
-    if (split.purview > 0) {
-      parts.push(`${split.purview}p×${SCU_PER_USER_PER_MONTH.purview}`);
-      monthly += split.purview * SCU_PER_USER_PER_MONTH.purview;
-    }
-    if (split.entra > 0) {
-      parts.push(`${split.entra}e×${SCU_PER_USER_PER_MONTH.entra}`);
-      monthly += split.entra * SCU_PER_USER_PER_MONTH.entra;
-    }
-    if (split.intune > 0) {
-      parts.push(`${split.intune}i×${SCU_PER_USER_PER_MONTH.intune}`);
-      monthly += split.intune * SCU_PER_USER_PER_MONTH.intune;
-    }
-    lines.push({
-      label: "Per-experience users",
-      expression: parts.join(" + "),
-      result: `${fmt(monthly, 0)} SCU/mo`,
-    });
-  } else {
-    const chatScuPerMonth =
-      input.analystCount *
-      input.messagesPerWorkday *
-      WORKING_DAYS_PER_MONTH *
-      SCU_PER_CHAT_MESSAGE;
-    lines.push({
-      label: "Chat usage",
-      expression: `${input.analystCount} admins × ${input.messagesPerWorkday} msgs/admin/workday × ${WORKING_DAYS_PER_MONTH} days × ${SCU_PER_CHAT_MESSAGE} SCU`,
-      result: `${fmt(chatScuPerMonth, 0)} SCU/mo`,
-    });
-  }
+  const chatScuPerMonth =
+    input.analystCount *
+    input.messagesPerWorkday *
+    WORKING_DAYS_PER_MONTH *
+    SCU_PER_CHAT_MESSAGE;
+  lines.push({
+    label: "Chat usage",
+    expression: `${input.analystCount} admins × ${input.messagesPerWorkday} msgs/admin/workday × ${WORKING_DAYS_PER_MONTH} days × ${SCU_PER_CHAT_MESSAGE} SCU`,
+    result: `${fmt(chatScuPerMonth, 0)} SCU/mo`,
+  });
 
   // Intensity-preset agents (only when picker is empty)
   if (input.agentCount > 0) {

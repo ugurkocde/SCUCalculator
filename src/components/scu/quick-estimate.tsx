@@ -17,7 +17,6 @@ import {
   inferQuickValuesFromInput,
   workloadSizeHint,
 } from "~/lib/scu/quick-presets";
-import { buildResultRange } from "~/lib/scu/summary";
 import { type CalculatorInput, type CalculatorOutput } from "~/lib/scu/types";
 
 interface QuickEstimateProps {
@@ -56,10 +55,6 @@ export const QuickEstimate = ({
 }: QuickEstimateProps) => {
   const quick = inferQuickValuesFromInput(input);
   const sizeHint = workloadSizeHint(quick.analystCount);
-  const range = buildResultRange(input, output);
-  const rangeNote = range
-    ? "Range reflects community-estimated agent rates."
-    : undefined;
 
   const pickerActive = input.selectedAgents.length > 0;
   const baseContext = { hasAgentSelections: pickerActive };
@@ -325,8 +320,6 @@ export const QuickEstimate = ({
             output={output}
             fxWarning={fxWarning}
             title="Projected monthly cost"
-            range={range}
-            rangeNote={rangeNote}
             trace={<CalculationTrace input={input} output={output} />}
             actions={
               <ShareActions input={input} output={output} shareUrl={shareUrl} />

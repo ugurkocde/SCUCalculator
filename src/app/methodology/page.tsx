@@ -162,16 +162,6 @@ export default function MethodologyPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">When the result is shown as a range</h2>
-          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
-            When any toggled agent uses a community estimate, the hero displays a range
-            (60% – 100% of the upper bound) instead of a single number. When every input is sourced
-            from a Microsoft-published rate, a single number is shown. This keeps procurement
-            conversations honest about uncertainty.
-          </p>
-        </section>
-
-        <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">Sources</h2>
           <ul className="space-y-3 text-sm">
             {SCU_SOURCES.map((source) => (

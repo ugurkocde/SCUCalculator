@@ -1,15 +1,12 @@
 import { type ReactNode } from "react";
 
 import { AnimatedNumber } from "~/components/scu/animated-number";
-import { type ResultRange } from "~/lib/scu/summary";
 import { type CalculatorOutput } from "~/lib/scu/types";
 
 interface CalculatorResultsProps {
   output: CalculatorOutput;
   fxWarning: string | null;
   title?: string;
-  range?: ResultRange | null;
-  rangeNote?: string;
   actions?: ReactNode;
   trace?: ReactNode;
 }
@@ -31,8 +28,6 @@ export const CalculatorResults = ({
   output,
   fxWarning,
   title = "Projected monthly cost",
-  range = null,
-  rangeNote,
   actions,
   trace,
 }: CalculatorResultsProps) => {
@@ -77,33 +72,22 @@ export const CalculatorResults = ({
 
       <div className="px-6 pb-2 pt-2">
         <p
-          className={`min-w-0 break-words font-semibold tabular-nums tracking-tight text-[color:var(--color-text)] ${
-            range
-              ? "text-[clamp(1.75rem,7vw,2.5rem)]"
-              : "text-[clamp(2.5rem,8vw,4.25rem)]"
-          }`}
+          className="min-w-0 break-words font-semibold tabular-nums tracking-tight text-[color:var(--color-text)] text-[clamp(2.5rem,8vw,4.25rem)]"
           aria-live="polite"
         >
-          {range ? (
-            range.monthlyLabel
-          ) : (
-            <AnimatedNumber
-              value={monthly}
-              format={(v) => formatCurrency(v, currency)}
-            />
-          )}
+          <AnimatedNumber
+            value={monthly}
+            format={(v) => formatCurrency(v, currency)}
+          />
         </p>
         <p className="mt-1.5 text-xs text-[color:var(--color-text-muted)]">
           <span className="font-mono">{formatCurrency(hourly, currency, 2)}</span>{" "}
           per hour · 730h month
-          {showConverted && !range
+          {showConverted
             ? ` · USD ${formatCurrency(output.monthlyUsd, "USD", 2)}`
             : ""}
         </p>
-        {range && rangeNote ? (
-          <p className="mt-2 text-xs text-amber-200/85">{rangeNote}</p>
-        ) : null}
-        {!hasOverageRisk && !range ? (
+        {!hasOverageRisk ? (
           <p className="mt-2 text-xs text-emerald-200/80">
             Fully covered by the included E5 / E7 pool. Add agents or analysts to model overage.
           </p>

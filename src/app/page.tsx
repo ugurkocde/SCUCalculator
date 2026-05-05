@@ -70,8 +70,10 @@ export default function HomePage() {
             <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text)]">
               min(10000, paid_E5_users / 1000 × 400)
             </code>{" "}
-            SCU per month, capped at 10,000. Consumption beyond that bills at $6 USD per
-            SCU. E3 is not part of the inclusion as of May 2026 — see the{" "}
+            SCU per month, capped at 10,000. The pool resets on the 1st of each month and
+            unused SCUs do not roll over. Consumption beyond the pool bills as overage at
+            $6 USD per SCU, billed at one-decimal precision. E3 is not part of the
+            inclusion as of May 2026 — see the{" "}
             <a
               href="https://learn.microsoft.com/copilot/security/security-copilot-inclusion"
               target="_blank"

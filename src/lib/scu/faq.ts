@@ -9,7 +9,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     id: "what-is-scu",
     question: "What is a Security Compute Unit (SCU)?",
     answer:
-      "A Security Compute Unit (SCU) is the unit Microsoft uses to meter Security Copilot consumption. One SCU represents one hour of provisioned Security Copilot capacity. Microsoft does not publish per-operation SCU rates; the figures of 3 SCU per prompt, 0.5 SCU per incident summary, and 3.7 SCU per promptbook appear in Microsoft Learn's billing-math examples as teaching scenarios, not benchmarks. Real consumption depends on operation complexity and is only visible in your tenant's usage dashboard.",
+      "A Security Compute Unit (SCU) is a unit of compute capacity Microsoft uses to meter Security Copilot consumption. In provisioned mode you commit to N SCUs per hour at a flat rate; in E5/E7 inclusion and overage modes, SCUs are deducted per consumed operation at one-decimal precision. Microsoft does not publish per-operation SCU rates; the figures of 3 SCU per prompt, 0.5 SCU per incident summary, and 3.7 SCU per promptbook appear in Microsoft Learn's billing-math examples as teaching scenarios, not benchmarks. Real consumption depends on operation complexity and is only visible in your tenant's usage dashboard.",
   },
   {
     id: "scus-included-in-e5",
@@ -27,13 +27,13 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     id: "overage-rate",
     question: "What is the SCU overage rate?",
     answer:
-      "Microsoft documents an overage rate of $6 USD per SCU on a pay-as-you-go basis once the included pool is exhausted and overage is enabled for the tenant.",
+      "Microsoft documents an overage rate of $6 USD per SCU on a pay-as-you-go basis once the included pool is exhausted and overage is enabled for the tenant. Overage is billed at one-decimal precision per consumed SCU — not rounded up to whole units.",
   },
   {
     id: "provisioned-rate",
     question: "What does a provisioned SCU cost per hour?",
     answer:
-      "Microsoft's pricing examples use $4 USD per provisioned SCU per hour. A single provisioned SCU running 24/7 costs roughly $2,920 per month before any E5 or E7 included pool is applied.",
+      "Microsoft's pricing examples use $4 USD per provisioned SCU per hour. A single provisioned SCU running 24/7 costs roughly $2,920 per month — billed flat, regardless of how much capacity you actually consume that hour. E5/E7 inclusion is a separate model with no hourly billing; the two don't stack.",
   },
   {
     id: "phishing-triage-cost",

@@ -56,7 +56,10 @@ export default function MethodologyPage() {
             <li>
               <strong className="text-[color:var(--color-text)]">Cost (E5 mode)</strong>:{" "}
               <code className="font-mono text-xs">max(0, monthly_consumed_SCU - included_SCU) × overage_rate</code>{" "}
-              spread across 730 hours.
+              billed monthly. Overage is metered at one-decimal precision per consumed
+              SCU. The hourly figure shown in the result card is purely{" "}
+              <code className="font-mono text-xs">monthly ÷ 730</code> for sizing
+              intuition; E5 + overage has no hourly billing.
             </li>
             <li>
               <strong className="text-[color:var(--color-text)]">Cost (provisioned mode)</strong>:{" "}

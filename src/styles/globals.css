@@ -22,6 +22,12 @@
   --color-accent: oklch(0.72 0.14 230);
   --color-accent-soft: oklch(0.72 0.14 230 / 0.18);
   --color-accent-fg: oklch(0.92 0.06 230);
+
+  /* Warning — warm amber. Reserved for the overage / "you start paying" moment. */
+  --color-warning: oklch(0.78 0.14 75);
+  --color-warning-soft: oklch(0.78 0.14 75 / 0.10);
+  --color-warning-fg: oklch(0.88 0.10 75);
+  --color-warning-edge: oklch(0.78 0.14 75 / 0.40);
 }
 
 :root {

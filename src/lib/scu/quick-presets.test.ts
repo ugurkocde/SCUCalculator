@@ -5,7 +5,9 @@ import { DEFAULT_INPUT } from "~/lib/scu/constants";
 import {
   AGENT_INTENSITY_PRESETS,
   QUICK_DEFAULT_VALUES,
+  SCENARIO_PRESETS,
   buildQuickInputPatch,
+  buildScenarioPatch,
   inferQuickValuesFromInput,
   workloadSizeHint,
 } from "~/lib/scu/quick-presets";
@@ -82,6 +84,37 @@ describe("workloadSizeHint", () => {
   });
   it("labels large SOCs as Heavy", () => {
     expect(workloadSizeHint(40).label).toBe("Heavy");
+  });
+});
+
+describe("SCENARIO_PRESETS", () => {
+  it("Small business stays inside the included pool", () => {
+    const small = SCENARIO_PRESETS.find((p) => p.id === "small")!;
+    const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(small) };
+    const output = calculateScuEstimate(merged);
+    expect(output.monthlyUsd).toBe(0);
+  });
+
+  it("Mid-market produces a non-zero monthly cost", () => {
+    const mid = SCENARIO_PRESETS.find((p) => p.id === "mid")!;
+    const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(mid) };
+    const output = calculateScuEstimate(merged);
+    expect(output.monthlyUsd).toBeGreaterThan(0);
+  });
+
+  it("Enterprise pushes meaningfully past the 10,000 SCU pool cap", () => {
+    const enterprise = SCENARIO_PRESETS.find((p) => p.id === "enterprise")!;
+    const merged = { ...DEFAULT_INPUT, ...buildScenarioPatch(enterprise) };
+    const output = calculateScuEstimate(merged);
+    expect(output.includedScuMonthly).toBe(10000);
+    expect(output.billableOverageScuMonthly).toBeGreaterThan(1000);
+  });
+
+  it("Enterprise scenario uses the agent picker instead of intensity preset", () => {
+    const enterprise = SCENARIO_PRESETS.find((p) => p.id === "enterprise")!;
+    const patch = buildScenarioPatch(enterprise);
+    expect(patch.agentCount).toBe(0);
+    expect(patch.selectedAgents?.length).toBeGreaterThan(0);
   });
 });
 

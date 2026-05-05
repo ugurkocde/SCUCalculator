@@ -1,4 +1,8 @@
-import { type CalculatorInput, type LicenseTier } from "~/lib/scu/types";
+import {
+  type AgentSelection,
+  type CalculatorInput,
+  type LicenseTier,
+} from "~/lib/scu/types";
 
 export type AgentIntensity = "none" | "few" | "many";
 
@@ -41,18 +45,18 @@ export const workloadSizeHint = (analystCount: number): WorkloadSizeHint => {
   if (analystCount <= 4) {
     return {
       label: "Light",
-      description: "Small SOC, evaluation phase",
+      description: "Small team, evaluating Copilot",
     };
   }
   if (analystCount <= 14) {
     return {
       label: "Standard",
-      description: "Mid-market SOC",
+      description: "Mid-sized team, regular use",
     };
   }
   return {
     label: "Heavy",
-    description: "Enterprise SOC, multi-shift",
+    description: "Large team, multi-shift coverage",
   };
 };
 
@@ -101,6 +105,78 @@ export const buildQuickInputPatch = (
     agentCount: pickerOverrides ? 0 : intensity.agentCount,
   };
 };
+
+export interface ScenarioPreset {
+  id: "small" | "mid" | "enterprise";
+  label: string;
+  summary: string;
+  values: QuickEstimateValues;
+  selectedAgents: AgentSelection[];
+}
+
+/**
+ * Three "start with an example" scenarios. Numbers are picked so each tells a
+ * distinct story when calculated against the E5 inclusion formula:
+ *   - Small: comfortably inside the pool ($0/mo)
+ *   - Mid-market: moderate overage from chat + a couple of agents
+ *   - Enterprise: pool capped at 10,000 SCU; heavy agent automation pushes past it
+ */
+export const SCENARIO_PRESETS: ScenarioPreset[] = [
+  {
+    id: "small",
+    label: "Small business",
+    summary: "250 E5 users · 2 admins · stays within pool",
+    values: {
+      licenseProfile: "e5_or_e7",
+      paidE5Users: 250,
+      analystCount: 2,
+      messagesPerWorkday: 5,
+      agentIntensity: "none",
+    },
+    selectedAgents: [],
+  },
+  {
+    id: "mid",
+    label: "Mid-market",
+    summary: "1,500 E5 users · 10 admins · 2 agents",
+    values: {
+      licenseProfile: "e5_or_e7",
+      paidE5Users: 1500,
+      analystCount: 10,
+      messagesPerWorkday: 8,
+      agentIntensity: "few",
+    },
+    selectedAgents: [],
+  },
+  {
+    id: "enterprise",
+    label: "Enterprise",
+    summary: "25,000 E5 users · 40 admins · heavy agent use",
+    values: {
+      licenseProfile: "e5_or_e7",
+      paidE5Users: 25000,
+      analystCount: 40,
+      messagesPerWorkday: 15,
+      agentIntensity: "none",
+    },
+    selectedAgents: [
+      { agentId: "phishing-triage", runsPerMonth: 10000 },
+      { agentId: "alert-triage", runsPerMonth: 6000 },
+      { agentId: "vulnerability-remediation", runsPerMonth: 2500 },
+      { agentId: "identity-risk-management", runsPerMonth: 800 },
+      { agentId: "conditional-access-optimization", runsPerMonth: 200 },
+    ],
+  },
+];
+
+export const buildScenarioPatch = (
+  preset: ScenarioPreset,
+): Partial<CalculatorInput> => ({
+  ...buildQuickInputPatch(preset.values, {
+    hasAgentSelections: preset.selectedAgents.length > 0,
+  }),
+  selectedAgents: preset.selectedAgents,
+});
 
 export const inferQuickValuesFromInput = (
   input: CalculatorInput,

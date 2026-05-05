@@ -10,7 +10,10 @@ import {
   AGENT_INTENSITY_PRESETS,
   type AgentIntensity,
   type QuickLicenseProfile,
+  SCENARIO_PRESETS,
+  type ScenarioPreset,
   buildQuickInputPatch,
+  buildScenarioPatch,
   inferQuickValuesFromInput,
   workloadSizeHint,
 } from "~/lib/scu/quick-presets";
@@ -93,6 +96,10 @@ export const QuickEstimate = ({
 
   const isE5 = quick.licenseProfile === "e5_or_e7";
 
+  const applyScenario = (preset: ScenarioPreset): void => {
+    onChange(buildScenarioPatch(preset));
+  };
+
   return (
     <section
       className="rounded-2xl border border-[color:var(--color-hairline)] bg-[color:var(--color-bg-raised)] p-6 sm:p-8 lg:p-10"
@@ -105,6 +112,32 @@ export const QuickEstimate = ({
         Microsoft includes a free SCU pool with paid M365 E5 and E7. Enter your numbers
         to see what you&apos;ll pay beyond it.
       </p>
+
+      <fieldset className="mt-6">
+        <legend className={labelEyebrow}>Start with an example</legend>
+        <div className="mt-2 grid gap-2 sm:grid-cols-3">
+          {SCENARIO_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => {
+                applyScenario(preset);
+              }}
+              className="flex flex-col gap-0.5 rounded-lg border border-[color:var(--color-hairline)] bg-white/[0.01] px-3 py-2.5 text-left transition hover:border-[color:var(--color-accent)]/50 hover:bg-[color:var(--color-accent)]/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+            >
+              <span className="text-sm font-semibold text-[color:var(--color-text)]">
+                {preset.label}
+              </span>
+              <span className="text-[11px] text-[color:var(--color-text-subtle)]">
+                {preset.summary}
+              </span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-[11px] text-[color:var(--color-text-subtle)]">
+          Loads typical inputs you can fine-tune below.
+        </p>
+      </fieldset>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,1fr)]">
         <div className="space-y-6">

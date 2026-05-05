@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface FlowStepProps {
   index: number;
   title: string;
@@ -170,15 +172,62 @@ export const ScuFlowDiagram = () => {
         </FlowStep>
       </div>
 
-      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-[color:var(--color-text-muted)]">
-        Think of SCUs like a prepaid bucket. Your M365 E5 / E7 licence refills the
-        bucket on the first of each month. Every time an agent runs (e.g. someone
-        reports a phishing email and the Phishing Triage Agent investigates), it
-        scoops a small amount of SCU from the bucket — typically around 0.5 SCU
-        per run. Whatever you don&apos;t use disappears at month-end. Once the bucket
-        is empty, additional usage bills as overage at $6 per consumed SCU. You
-        only ever pay for runs that actually happen.
-      </p>
+      <div className="mt-6 grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-end">
+        <p className="max-w-3xl text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+          Think of SCUs like a prepaid bucket. Your M365 E5 / E7 licence refills
+          the bucket on the first of each month. Every time an agent runs (e.g.
+          someone reports a phishing email and the Phishing Triage Agent
+          investigates), it scoops a small amount of SCU from the bucket —
+          typically around 0.5 SCU per run. Whatever you don&apos;t use
+          disappears at month-end. Once the bucket is empty, additional usage
+          bills as overage at $6 per consumed SCU. You only ever pay for runs
+          that actually happen.
+        </p>
+
+        <figure className="relative flex flex-col gap-3 rounded-xl border border-[color:var(--color-hairline)] bg-white/[0.02] p-4 pl-5 sm:pl-16 md:ml-auto md:max-w-sm">
+          <span
+            aria-hidden="true"
+            className="absolute -left-2 top-3 font-serif text-4xl leading-none text-[color:var(--color-accent)]/40 sm:-left-1"
+          >
+            “
+          </span>
+          <blockquote className="text-[13px] italic leading-relaxed text-[color:var(--color-text-muted)] sm:pr-2">
+            Most triage agents I&apos;ve seen in real tenants run well below 0.5
+            SCU. It&apos;s a fair upper bound for planning — actual usage
+            depends on the entities each run touches.
+          </blockquote>
+          <figcaption className="flex items-center gap-2 pt-1 text-xs text-[color:var(--color-text-subtle)]">
+            <Image
+              src="/ugur-koc.jpg"
+              alt="Ugur Koc"
+              width={64}
+              height={64}
+              className="h-8 w-8 rounded-full border border-[color:var(--color-hairline)] object-cover"
+            />
+            <span className="flex flex-col leading-tight">
+              <span className="font-semibold text-[color:var(--color-text)]">
+                Ugur Koc
+              </span>
+              <a
+                href="https://www.linkedin.com/in/ugurkocde/"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-1 text-[10px] text-[color:var(--color-text-muted)] hover:text-[color:var(--color-accent-fg)]"
+              >
+                LinkedIn
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="currentColor"
+                >
+                  <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.95v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
+                </svg>
+              </a>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
 
       <style>{`
         @keyframes scu-pool-cycle {

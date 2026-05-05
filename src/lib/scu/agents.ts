@@ -94,10 +94,10 @@ export const SECURITY_COPILOT_AGENTS: SecurityCopilotAgent[] = [
     productTag: "Standalone",
     description:
       "Generates a tailored threat intelligence briefing for the tenant on a recurring schedule.",
-    scuPerRun: 3.7,
+    scuPerRun: 0.5,
     source: "community-estimate",
     sourceNote:
-      "Microsoft does not publish a per-run rate. The agent runs as a promptbook; 3.7 SCU matches the value used for a promptbook run in Microsoft's billing-math example.",
+      "Microsoft does not publish a per-run rate. Aligned with the other triage agents at 0.5 SCU; the 3.7 SCU promptbook value in Microsoft's billing-math example is an illustrative scenario, not a benchmark for this agent.",
     defaultRunsPerMonth: 4,
     docsUrl: "https://learn.microsoft.com/copilot/security/threat-intel-briefing-agent",
   },

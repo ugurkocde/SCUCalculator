@@ -139,10 +139,9 @@ export default function MethodologyPage() {
             verbatim as &ldquo;On average, each agent run consumes less than one SCU&rdquo; on
             Microsoft Learn. For every other agent, Microsoft explicitly does not publish a
             per-run rate and instead points to the in-tenant Security Copilot usage
-            dashboard. This calculator defaults the unpublished agents to 0.5 SCU/run,
+            dashboard. This calculator defaults all unpublished agents to 0.5 SCU/run,
             anchored to the incident-summarisation reference (0.5 SCU) used in Microsoft&apos;s
-            billing-math example, with the Threat Intelligence Briefing Agent at 3.7 SCU
-            (the promptbook reference). Agent cards label each rate as either{" "}
+            billing-math example. Agent cards label each rate as either{" "}
             <span className="text-emerald-200">Microsoft</span> (documented) or{" "}
             <span className="text-amber-200">Estimate</span> (anchored to the closest
             Microsoft reference number). Earlier versions of this calculator used 1.0 SCU

@@ -98,9 +98,9 @@ export const QuickEstimate = ({
       className="rounded-2xl border border-[color:var(--color-hairline)] bg-[color:var(--color-bg-raised)] p-6 sm:p-8 lg:p-10"
       aria-label="Quick SCU estimate"
     >
-      <h1 className="max-w-3xl text-balance text-4xl font-semibold tracking-[-0.02em] text-[color:var(--color-text)] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
+      <h2 className="max-w-3xl text-balance text-4xl font-semibold tracking-[-0.02em] text-[color:var(--color-text)] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
         What will Security Copilot cost you?
-      </h1>
+      </h2>
       <p className="mt-3 max-w-2xl text-base text-[color:var(--color-text-muted)] sm:text-lg">
         Microsoft includes a free SCU pool with paid M365 E5 and E7. Enter your numbers
         to see what you&apos;ll pay beyond it.

@@ -1,0 +1,30 @@
+# SCU Calculator
+
+> Free Microsoft Security Copilot SCU (Security Compute Unit) pricing calculator.
+> Estimates monthly cost using Microsoft-published formulas. Built and maintained
+> by Ugur Koc, a Microsoft MVP.
+
+## Calculator
+
+- [Home — interactive calculator](https://scucalculator.com/): Live monthly cost estimator with three inputs (license profile, chat-admin workload, agent selection).
+
+## Reference content
+
+- [Methodology and sources](https://scucalculator.com/methodology): Formulas, defaults, agent rate provenance, and Microsoft Learn citations behind every number.
+- [Per-agent SCU consumption](https://scucalculator.com/agents): Reference table of Microsoft Security Copilot agents with documented or estimated SCU per run.
+- [SCU pricing FAQ](https://scucalculator.com/faq): Common questions about SCU pricing, E5 and E7 inclusion, per-agent consumption, and overage billing.
+
+## Key facts
+
+- SCU stands for Security Compute Unit, Microsoft's metering unit for Security Copilot.
+- M365 E5 / E7 included pool formula: min(10000, paid_E5_users / 1000 × 400) SCU per month.
+- Included pool is capped at 10,000 SCU per month and resets on the first of each month. Unused SCUs do not roll over.
+- Overage rate: $6 USD per SCU, billed at one-decimal precision.
+- Provisioned rate: $4 USD per SCU per hour.
+- Microsoft 365 E3 receives no SCU inclusion.
+- Microsoft has only published per-run SCU rates for the Conditional Access Optimization and Identity Risk Management agents (less than 1 SCU per run on average).
+
+## Optional
+
+- [GitHub repository](https://github.com/ugurkocde/scucalculator): MIT-licensed source code.
+- [Author on LinkedIn](https://www.linkedin.com/in/ugurkocde/): Ugur Koc, Microsoft MVP.

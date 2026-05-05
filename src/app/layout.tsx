@@ -1,13 +1,15 @@
 import "~/styles/globals.css";
 
-import { type Metadata } from "next";
+import { type Metadata, type Viewport } from "next";
 import { IBM_Plex_Mono, Sora } from "next/font/google";
 
 import { JsonLd } from "~/components/scu/json-ld";
+import { SiteFooter } from "~/components/scu/site-footer";
 import { SiteHeader } from "~/components/scu/site-header";
 import { SITE_URL } from "~/lib/scu/constants";
 import {
   buildOrganizationLd,
+  buildPersonLd,
   buildWebSiteLd,
 } from "~/lib/scu/structured-data";
 
@@ -36,19 +38,16 @@ export const metadata: Metadata = {
     type: "website",
     url: `${SITE_URL}/`,
     siteName: "SCU Calculator",
+    locale: "en_US",
     title: "Microsoft Security Copilot SCU Calculator",
     description:
       "Estimate Microsoft Security Copilot SCU cost. Includes E5 and E7 auto-inclusion formula and per-agent SCU consumption.",
-    images: [
-      { url: "/og.png", width: 1200, height: 630, alt: "Security Copilot SCU Calculator" },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Microsoft Security Copilot SCU Calculator",
     description:
       "Free SCU cost estimator with the official E5 and E7 inclusion formula.",
-    images: ["/og.png"],
   },
   category: "technology",
   icons: {
@@ -59,6 +58,10 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon", sizes: "180x180" }],
     shortcut: ["/favicon.ico"],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1a1c22",
 };
 
 const sora = Sora({
@@ -79,9 +82,13 @@ export default function RootLayout({
     <html lang="en" className={`${sora.variable} ${ibmPlexMono.variable}`}>
       <body>
         <JsonLd id="ld-organization" data={buildOrganizationLd()} />
+        <JsonLd id="ld-person" data={buildPersonLd()} />
         <JsonLd id="ld-website" data={buildWebSiteLd()} />
         <SiteHeader />
         {children}
+        <div className="mx-auto w-full max-w-6xl px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] lg:pb-8">
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

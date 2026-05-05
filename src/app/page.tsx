@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import Link from "next/link";
 
 import { CalculatorShell } from "~/components/scu/calculator-shell";
 import { HomeFaq } from "~/components/scu/home-faq";
@@ -16,14 +17,6 @@ export const metadata: Metadata = {
   description:
     "Estimate Microsoft Security Copilot SCU cost in under 60 seconds. Includes the M365 E5 and E7 auto-inclusion formula and per-agent SCU consumption. No Azure login required.",
   alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    url: `${SITE_URL}/`,
-    title: "Microsoft Security Copilot SCU Calculator",
-    description:
-      "Free SCU cost estimator with the official E5 and E7 inclusion formula and Microsoft Security Store agent catalogue.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "SCU Calculator" }],
-  },
 };
 
 export default function HomePage() {
@@ -38,6 +31,34 @@ export default function HomePage() {
         ])}
       />
 
+      <h1 className="sr-only">
+        Microsoft Security Copilot SCU Calculator — free monthly cost estimator
+      </h1>
+      <section className="sr-only" aria-label="About this calculator">
+        <p>
+          The SCU Calculator is a free Microsoft Security Copilot pricing tool
+          built and maintained by Ugur Koc, a Microsoft MVP. It estimates monthly
+          Security Compute Unit (SCU) cost using formulas published by Microsoft.
+        </p>
+        <p>
+          A Security Compute Unit (SCU) is the metering unit Microsoft uses to
+          bill Security Copilot consumption. Microsoft auto-includes a free SCU
+          pool for paid Microsoft 365 E5 and E7 tenants using the formula
+          min(10000, paid_E5_users / 1000 × 400) SCU per month. The included
+          pool is capped at 10,000 SCU per month and resets on the first of
+          each month. Consumption beyond the included pool bills as overage at
+          $6 USD per SCU. Provisioned capacity is committed by the hour at $4
+          USD per SCU per hour. Microsoft 365 E3 is not part of the inclusion.
+        </p>
+        <p>
+          The calculator accepts three primary inputs: license profile (E5, E7,
+          or pay-as-you-go), chat administrator workload (number of admins,
+          messages per workday across 22 working days), and selected Security
+          Copilot agents from the published catalogue with documented or
+          estimated SCU per run.
+        </p>
+      </section>
+
       <div className="mx-auto w-full max-w-6xl space-y-10">
         <CalculatorShell />
 
@@ -51,7 +72,14 @@ export default function HomePage() {
             SCU rates. Their billing-math examples illustrate with a hypothetical prompt at
             3 SCU, an incident summary at 0.5 SCU, and a promptbook at 3.7 SCU — these are
             teaching scenarios, not benchmarks. Real consumption depends on prompt
-            complexity and is only visible in your tenant&apos;s usage dashboard.
+            complexity and is only visible in your tenant&apos;s usage dashboard. See our{" "}
+            <Link
+              href="/methodology"
+              className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2"
+            >
+              full methodology
+            </Link>{" "}
+            for the sourcing behind every number.
           </p>
           <p>
             Microsoft auto-includes a free SCU pool with paid Microsoft 365 E5 and E7
@@ -63,6 +91,13 @@ export default function HomePage() {
             unused SCUs do not roll over. Consumption beyond the pool bills as overage at
             $6 USD per SCU, billed at one-decimal precision. E3 is not part of the
             inclusion — see the{" "}
+            <Link
+              href="/faq"
+              className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2"
+            >
+              detailed FAQ
+            </Link>{" "}
+            or the{" "}
             <a
               href="https://learn.microsoft.com/copilot/security/security-copilot-inclusion"
               target="_blank"
@@ -76,8 +111,14 @@ export default function HomePage() {
           <p>
             Microsoft has only published per-run rates for the Conditional Access
             Optimization and Identity Risk Management agents (less than 1 SCU per run on
-            average). For everything else this calculator uses 1 SCU per run as a
-            conservative upper bound — verify against your tenant&apos;s usage dashboard.
+            average). For everything else, see the{" "}
+            <Link
+              href="/agents"
+              className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2"
+            >
+              per-agent SCU table
+            </Link>{" "}
+            — verify against your tenant&apos;s usage dashboard.
           </p>
         </section>
 

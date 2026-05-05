@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { AgentPicker } from "~/components/scu/agent-picker";
 import { QuickEstimate } from "~/components/scu/quick-estimate";
 import { ScuFlowDiagram } from "~/components/scu/scu-flow-diagram";
-import { SiteFooter } from "~/components/scu/site-footer";
 import { StickyMobileCost } from "~/components/scu/sticky-mobile-cost";
 import { DEFAULT_INPUT, SITE_URL } from "~/lib/scu/constants";
 import { calculateScuEstimate } from "~/lib/scu/calculate";
@@ -74,8 +73,6 @@ export const CalculatorShell = () => {
       <ScuFlowDiagram />
 
       <AgentPicker input={input} onChange={updateInput} />
-
-      <SiteFooter />
 
       <StickyMobileCost output={output} />
     </div>

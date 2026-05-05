@@ -5,6 +5,7 @@ import { JsonLd } from "~/components/scu/json-ld";
 import { SECURITY_COPILOT_AGENTS } from "~/lib/scu/agents";
 import { SITE_URL } from "~/lib/scu/constants";
 import {
+  buildAgentDatasetLd,
   buildAgentItemListLd,
   buildBreadcrumbLd,
 } from "~/lib/scu/structured-data";
@@ -20,6 +21,7 @@ export default function AgentsPage() {
   return (
     <main className="min-h-screen px-4 pb-24 pt-8 text-[color:var(--color-text)] lg:pb-16 lg:pt-12">
       <JsonLd id="ld-agents" data={buildAgentItemListLd()} />
+      <JsonLd id="ld-agents-dataset" data={buildAgentDatasetLd()} />
       <JsonLd
         id="ld-breadcrumb"
         data={buildBreadcrumbLd([

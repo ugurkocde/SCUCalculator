@@ -38,7 +38,7 @@ export const DEFAULT_INPUT: CalculatorInput = {
   agentCount: 0,
   runsPerAgentPerHour: 3,
   scuPerRun: 0.18,
-  backgroundScuPerHour: 1.5,
+  backgroundScuPerHour: 0,
   selectedAgents: [],
   userSplit: null,
 };

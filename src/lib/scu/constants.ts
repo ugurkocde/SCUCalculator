@@ -126,7 +126,7 @@ const buildDateRaw = process.env.BUILD_DATE;
 export const BUILD_DATE: string =
   buildDateRaw && /^\d{4}-\d{2}-\d{2}$/.test(buildDateRaw)
     ? buildDateRaw
-    : "2026-05-05";
+    : new Date().toISOString().slice(0, 10);
 
 export const SITE_URL: string =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://scucalculator.com";

@@ -3,7 +3,10 @@ import Link from "next/link";
 
 import { JsonLd } from "~/components/scu/json-ld";
 import { SCU_SOURCES, SITE_URL } from "~/lib/scu/constants";
-import { buildBreadcrumbLd } from "~/lib/scu/structured-data";
+import {
+  buildBreadcrumbLd,
+  buildMethodologyArticleLd,
+} from "~/lib/scu/structured-data";
 
 export const metadata: Metadata = {
   title: "Methodology and sources",
@@ -15,6 +18,7 @@ export const metadata: Metadata = {
 export default function MethodologyPage() {
   return (
     <main className="min-h-screen px-4 pb-24 pt-8 text-[color:var(--color-text)] lg:pb-16 lg:pt-12">
+      <JsonLd id="ld-tech-article" data={buildMethodologyArticleLd()} />
       <JsonLd
         id="ld-breadcrumb"
         data={buildBreadcrumbLd([

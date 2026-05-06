@@ -107,7 +107,7 @@ export const CalculatorResults = ({
               <path d="M13 2 4 12h6l-1 6 9-10h-6l1-6Z" />
             </svg>
             <span>
-              Save{" "}
+              You&apos;d save{" "}
               <span className="font-mono tabular-nums text-[color:var(--color-accent-fg)]">
                 {formatCurrency(
                   showConverted
@@ -116,15 +116,62 @@ export const CalculatorResults = ({
                     : output.provisionedRecommendation.monthlySavingsUsd,
                   currency,
                 )}
-              </span>{" "}
-              / month by provisioning{" "}
+              </span>
+              /month if you subscribe to{" "}
               <span className="font-mono tabular-nums">
-                {output.provisionedRecommendation.provisionedScuPerHour} SCU/hour
+                {output.provisionedRecommendation.provisionedScuPerHour}
               </span>{" "}
-              at $4 instead of paying $6 overage.{" "}
+              {output.provisionedRecommendation.provisionedScuPerHour === 1 ? "SCU" : "SCUs"}{" "}
+              up front instead of paying as you go.{" "}
               <a
                 href="/methodology#provisioning"
                 className="text-[color:var(--color-text-muted)] underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-[color:var(--color-accent-fg)]"
+              >
+                why
+              </a>
+            </span>
+          </p>
+        ) : null}
+        {output.overageCapRecommendation.applicable ? (
+          <p
+            data-testid="overage-cap-pill"
+            className="mt-3 inline-flex items-center gap-2 rounded-md border border-amber-300/30 bg-amber-300/[0.05] px-3 py-2 text-xs text-[color:var(--color-text)]"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 20 20"
+              className="h-3.5 w-3.5 text-amber-200"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 11V8a5 5 0 0 1 10 0v3" />
+              <rect x="4" y="11" width="12" height="7" rx="1.5" />
+            </svg>
+            <span>
+              Set your overage cap to{" "}
+              <span className="font-mono tabular-nums text-amber-100">
+                {output.overageCapRecommendation.recommendedOverageScuPerHour}
+              </span>{" "}
+              <span className="text-amber-100">
+                {output.overageCapRecommendation.recommendedOverageScuPerHour === 1 ? "SCU" : "SCUs"}
+              </span>{" "}
+              in tenant settings. Your bill can never go above{" "}
+              <span className="font-mono tabular-nums text-amber-100">
+                {formatCurrency(
+                  showConverted
+                    ? output.overageCapRecommendation.monthlyCostCeilingUsd *
+                        output.currencyTotals.fxRate
+                    : output.overageCapRecommendation.monthlyCostCeilingUsd,
+                  currency,
+                )}
+              </span>
+              /month.{" "}
+              <a
+                href="/methodology#overage-cap"
+                className="text-[color:var(--color-text-muted)] underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-amber-100"
               >
                 why
               </a>

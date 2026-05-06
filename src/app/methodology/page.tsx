@@ -141,6 +141,42 @@ export default function MethodologyPage() {
           </p>
         </section>
 
+        <section id="overage-cap" className="space-y-3 scroll-mt-16">
+          <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">
+            How the recommended overage cap is calculated
+          </h2>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            Microsoft Security Copilot capacity exposes a tenant-side setting called{" "}
+            <strong className="text-[color:var(--color-text)]">Number of overage units</strong> — a
+            configurable integer between 0 and 999 (or unlimited) that puts a hard ceiling on how
+            many overage SCUs Microsoft will bill in a given hour. Microsoft frames it as a budget
+            guardrail: their own documentation example provisions four SCUs and sets an overage
+            limit of six &ldquo;to stay within the monthly budget.&rdquo; When provisioned plus cap is
+            exhausted, Security Copilot returns a high-usage error rather than continuing to bill.
+          </p>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            Microsoft does <em>not</em> publish a recommended formula for the cap value. This
+            calculator suggests one with a 50% spike-absorption buffer:
+          </p>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text)]">
+              cap = clamp(ceil(projected_overage_SCU/hour × 1.5), 1, 999)
+            </code>
+          </p>
+          <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">
+            The 1.5× multiplier matches the ratio in Microsoft&apos;s own
+            four-provisioned-/-six-cap docs example. The 999 ceiling matches the upper bound of the
+            tenant-side field. The recommendation is hidden when there is no projected overage —
+            the cap would be irrelevant. The displayed worst-case bill is{" "}
+            <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text)]">
+              (provisioned_cost + cap × $6) × 730
+            </code>
+            , i.e. the bill if every hour ran fully into the cap. Treat the suggestion as a
+            starting safety net while you learn your real consumption pattern from the in-tenant
+            usage dashboard, then tighten or relax it.
+          </p>
+        </section>
+
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-[color:var(--color-text)]">Agent SCU rate provenance</h2>
           <p className="text-sm leading-relaxed text-[color:var(--color-text-muted)]">

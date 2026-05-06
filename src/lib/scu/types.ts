@@ -58,6 +58,13 @@ export interface ProvisionedRecommendation {
   worthProvisioning: boolean;
 }
 
+export interface OverageCapRecommendation {
+  recommendedOverageScuPerHour: number;
+  bufferMultiplier: number;
+  monthlyCostCeilingUsd: number;
+  applicable: boolean;
+}
+
 export interface CalculatorOutput {
   effectiveConsumedScuPerHour: number;
   hourlyUsd: number;
@@ -69,6 +76,7 @@ export interface CalculatorOutput {
   currencyTotals: CurrencyTotals;
   warnings: string[];
   provisionedRecommendation: ProvisionedRecommendation;
+  overageCapRecommendation: OverageCapRecommendation;
 }
 
 export interface SourceReference {

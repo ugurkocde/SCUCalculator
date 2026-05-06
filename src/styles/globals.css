@@ -68,6 +68,17 @@ textarea {
   font: inherit;
 }
 
+/* iOS Safari auto-zooms when an input's font-size is below 16px, then never
+   zooms back out — leaving the page narrower than the viewport. Force every
+   form field to 16px on mobile so focusing a field never triggers the zoom. */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;

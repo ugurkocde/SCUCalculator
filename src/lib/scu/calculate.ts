@@ -13,8 +13,12 @@ import {
   type AgentSelection,
   type CalculatorInput,
   type CalculatorOutput,
+  type OverageCapRecommendation,
   type ProvisionedRecommendation,
 } from "~/lib/scu/types";
+
+const OVERAGE_CAP_BUFFER = 1.5;
+const OVERAGE_CAP_MAX = 999;
 
 const sanitizeNumber = (value: number): number => {
   if (!Number.isFinite(value) || Number.isNaN(value)) {
@@ -180,6 +184,54 @@ const recommendProvisioned = (
   };
 };
 
+/**
+ * Recommends an overage SCU/hour cap to bound worst-case spend.
+ *
+ * Microsoft documents the cap as a 0–999 integer field on the capacity resource
+ * and uses it as a budget guardrail (their docs example: 4 provisioned + 6 cap).
+ * No public formula exists for the cap value, so we use a 1.5× buffer over the
+ * projected steady-state overage rate (50% headroom, matching the ratio in
+ * Microsoft's own example).
+ *
+ * The implied monthly cost ceiling is the worst-case bill if every hour hit the
+ * cap: `provisioned_cost + cap × $6 × 730`.
+ */
+const recommendOverageCap = (
+  billableOverageScuHourly: number,
+  provisionedScuPerHour: number,
+  provisionedRateUsd: number,
+  overageRateUsd: number,
+  mode: CalculatorInput["mode"],
+): OverageCapRecommendation => {
+  const overageHourly = sanitizeNumber(billableOverageScuHourly);
+  const provHourly = sanitizeNumber(provisionedScuPerHour);
+  const provRate = sanitizeNumber(provisionedRateUsd);
+  const overRate = sanitizeNumber(overageRateUsd);
+
+  if (overageHourly <= 0 || overRate <= 0) {
+    return {
+      recommendedOverageScuPerHour: 0,
+      bufferMultiplier: OVERAGE_CAP_BUFFER,
+      monthlyCostCeilingUsd: 0,
+      applicable: false,
+    };
+  }
+
+  const buffered = Math.ceil(overageHourly * OVERAGE_CAP_BUFFER);
+  const cap = Math.min(OVERAGE_CAP_MAX, Math.max(1, buffered));
+
+  const provisionedFloor = mode === "provisioned_overage" ? provHourly * provRate : 0;
+  const cappedHourlyCost = provisionedFloor + cap * overRate;
+  const monthlyCostCeilingUsd = cappedHourlyCost * HOURS_PER_MONTH;
+
+  return {
+    recommendedOverageScuPerHour: cap,
+    bufferMultiplier: OVERAGE_CAP_BUFFER,
+    monthlyCostCeilingUsd: round(monthlyCostCeilingUsd),
+    applicable: true,
+  };
+};
+
 export const calculateScuEstimate = (input: CalculatorInput): CalculatorOutput => {
   const effectiveConsumedScuPerHour = getEffectiveConsumedScuPerHour(input);
   const includedScuMonthly = getIncludedScuMonthly(input);
@@ -218,6 +270,14 @@ export const calculateScuEstimate = (input: CalculatorInput): CalculatorOutput =
     overageRateUsd,
   );
 
+  const overageCapRecommendation = recommendOverageCap(
+    billableOverageScuHourly,
+    provisionedScuPerHour,
+    provisionedRateUsd,
+    overageRateUsd,
+    input.mode,
+  );
+
   return {
     effectiveConsumedScuPerHour: round(effectiveConsumedScuPerHour),
     hourlyUsd: round(hourlyUsd),
@@ -235,5 +295,6 @@ export const calculateScuEstimate = (input: CalculatorInput): CalculatorOutput =
     },
     warnings: buildWarnings(input, includedScuMonthly),
     provisionedRecommendation,
+    overageCapRecommendation,
   };
 };

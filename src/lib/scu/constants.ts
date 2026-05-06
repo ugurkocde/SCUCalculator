@@ -97,6 +97,14 @@ export const SCU_SOURCES: SourceReference[] = [
       "Capacity, overage billing behavior, and SCU monitoring guidance for budget control.",
   },
   {
+    id: "capacity-overage-cap",
+    title: "Security Compute Units and capacity (overage cap reference)",
+    publisher: "Microsoft Learn",
+    url: "https://learn.microsoft.com/copilot/security/security-compute-units-capacity",
+    description:
+      "Defines the overage cap as a configurable 0–999 SCU/hour ceiling on the capacity resource. Microsoft's own example uses a cap to keep monthly spend predictable.",
+  },
+  {
     id: "ignite-2025",
     title: "Security Copilot announcements at Ignite 2025",
     publisher: "Microsoft Security Blog",

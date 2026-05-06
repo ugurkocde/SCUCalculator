@@ -28,4 +28,35 @@ describe("CalculatorResults", () => {
 
     expect(screen.getAllByText(/€/).length).toBeGreaterThan(0);
   });
+
+  it("renders the overage cap recommendation pill when overage is projected", () => {
+    const input = {
+      ...DEFAULT_INPUT,
+      mode: "provisioned_overage" as const,
+      estimatorMode: "direct" as const,
+      consumedScuPerHour: 18,
+      provisionedScuPerHour: 10,
+    };
+    const output = calculateScuEstimate(input);
+    render(<CalculatorResults output={output} fxWarning={null} />);
+
+    expect(screen.getByTestId("overage-cap-pill")).toBeInTheDocument();
+    expect(screen.getByTestId("overage-cap-pill").textContent).toContain("12 SCUs");
+  });
+
+  it("hides the overage cap pill when there is no projected overage", () => {
+    const input = {
+      ...DEFAULT_INPUT,
+      mode: "e5_included" as const,
+      licenseTier: "e5_security" as const,
+      includedPoolTier: "auto_e5_license_formula" as const,
+      e5PaidUserLicenses: 100000,
+      estimatorMode: "direct" as const,
+      consumedScuPerHour: 0.1,
+    };
+    const output = calculateScuEstimate(input);
+    render(<CalculatorResults output={output} fxWarning={null} />);
+
+    expect(screen.queryByTestId("overage-cap-pill")).not.toBeInTheDocument();
+  });
 });

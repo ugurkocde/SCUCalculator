@@ -169,6 +169,84 @@ describe("calculateScuEstimate", () => {
     expect(output.provisionedRecommendation.monthlySavingsUsd).toBe(0);
   });
 
+  it("recommends a buffered overage cap when overage is projected", () => {
+    const input = baseInput();
+    input.mode = "provisioned_overage";
+    input.estimatorMode = "direct";
+    input.consumedScuPerHour = 18;
+    input.provisionedScuPerHour = 10;
+    input.provisionedRateUsd = 4;
+    input.overageRateUsd = 6;
+
+    const output = calculateScuEstimate(input);
+
+    // overage hourly = 8, × 1.5 buffer = 12
+    expect(output.overageCapRecommendation.applicable).toBe(true);
+    expect(output.overageCapRecommendation.recommendedOverageScuPerHour).toBe(12);
+    expect(output.overageCapRecommendation.bufferMultiplier).toBe(1.5);
+    // ceiling = (10×4 + 12×6) × 730 = (40 + 72) × 730 = 81,760
+    expect(output.overageCapRecommendation.monthlyCostCeilingUsd).toBe(81760);
+  });
+
+  it("rounds the buffered overage cap up to the next integer", () => {
+    const input = baseInput();
+    input.mode = "provisioned_overage";
+    input.estimatorMode = "direct";
+    input.consumedScuPerHour = 11;
+    input.provisionedScuPerHour = 10;
+
+    const output = calculateScuEstimate(input);
+
+    // overage hourly = 1, × 1.5 = 1.5 → ceil → 2
+    expect(output.overageCapRecommendation.recommendedOverageScuPerHour).toBe(2);
+  });
+
+  it("clamps the overage cap recommendation to 999", () => {
+    const input = baseInput();
+    input.mode = "provisioned_overage";
+    input.estimatorMode = "direct";
+    input.consumedScuPerHour = 1000;
+    input.provisionedScuPerHour = 0;
+
+    const output = calculateScuEstimate(input);
+
+    // 1000 × 1.5 = 1500 → clamped to 999
+    expect(output.overageCapRecommendation.recommendedOverageScuPerHour).toBe(999);
+  });
+
+  it("floors the overage cap recommendation at 1 when overage is fractional", () => {
+    const input = baseInput();
+    input.mode = "e5_included";
+    input.licenseTier = "e5_security";
+    input.includedPoolTier = "auto_e5_license_formula";
+    input.e5PaidUserLicenses = 1000;
+    input.estimatorMode = "direct";
+    input.consumedScuPerHour = 0.6;
+
+    const output = calculateScuEstimate(input);
+
+    // small fractional overage hourly, but ceil(× 1.5) ≥ 1 always when > 0
+    expect(output.billableOverageScuHourly).toBeGreaterThan(0);
+    expect(output.overageCapRecommendation.applicable).toBe(true);
+    expect(output.overageCapRecommendation.recommendedOverageScuPerHour).toBeGreaterThanOrEqual(1);
+  });
+
+  it("marks the overage cap as not applicable when there is no overage", () => {
+    const input = baseInput();
+    input.mode = "e5_included";
+    input.licenseTier = "e5_security";
+    input.includedPoolTier = "auto_e5_license_formula";
+    input.e5PaidUserLicenses = 100000;
+    input.estimatorMode = "direct";
+    input.consumedScuPerHour = 0.1;
+
+    const output = calculateScuEstimate(input);
+
+    expect(output.billableOverageScuMonthly).toBe(0);
+    expect(output.overageCapRecommendation.applicable).toBe(false);
+    expect(output.overageCapRecommendation.recommendedOverageScuPerHour).toBe(0);
+  });
+
   it("caps E5 included pool at 10,000 SCUs in auto formula mode", () => {
     const input = baseInput();
     input.mode = "e5_included";

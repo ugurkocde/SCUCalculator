@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { type Metadata, type Viewport } from "next";
 import { IBM_Plex_Mono, Sora } from "next/font/google";
+import Script from "next/script";
 
 import { JsonLd } from "~/components/scu/json-ld";
 import { SiteFooter } from "~/components/scu/site-footer";
@@ -89,6 +90,14 @@ export default function RootLayout({
         <div className="mx-auto w-full max-w-6xl px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] lg:pb-8">
           <SiteFooter />
         </div>
+        <Script
+          src="https://plausible.io/js/pa-UwVBku_4rNP-CtNb1IKhf.js"
+          strategy="afterInteractive"
+          async
+        />
+        <Script id="plausible-init" strategy="afterInteractive">
+          {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`}
+        </Script>
       </body>
     </html>
   );

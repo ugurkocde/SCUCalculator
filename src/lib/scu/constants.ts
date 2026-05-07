@@ -86,7 +86,7 @@ export const SCU_SOURCES: SourceReference[] = [
     publisher: "Microsoft Learn",
     url: "https://learn.microsoft.com/en-us/copilot/security/get-started-security-copilot",
     description:
-      "Current inclusion model reference: 400 included SCUs per 1,000 paid Microsoft 365 E5 users (up to 10,000), with purchase guidance constraints.",
+      "Current inclusion model reference: 0.4 SCU per paid Microsoft 365 E5/E7 license (Microsoft's docs phrase the same rate as 400 per 1,000 licenses), capped at 10,000 SCU/month.",
   },
   {
     id: "manage-usage",

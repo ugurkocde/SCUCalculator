@@ -43,12 +43,13 @@ export default function HomePage() {
         <p>
           A Security Compute Unit (SCU) is the metering unit Microsoft uses to
           bill Security Copilot consumption. Microsoft auto-includes a free SCU
-          pool for paid Microsoft 365 E5 and E7 tenants using the formula
-          min(10000, paid_E5_users / 1000 × 400) SCU per month. The included
-          pool is capped at 10,000 SCU per month and resets on the first of
-          each month. Consumption beyond the included pool bills as overage at
-          $6 USD per SCU. Provisioned capacity is committed by the hour at $4
-          USD per SCU per hour. Microsoft 365 E3 is not part of the inclusion.
+          pool for paid Microsoft 365 E5 and E7 tenants at 0.4 SCU per paid
+          license per month, capped at 10,000 SCU/month — the cap is reached
+          at 25,000 paid licenses. The pool resets on the first of each month
+          and does not roll over. Consumption beyond the included pool bills
+          as overage at $6 USD per SCU. Provisioned capacity is committed by
+          the hour at $4 USD per SCU per hour. Microsoft 365 E3 is not part
+          of the inclusion.
         </p>
         <p>
           The calculator accepts three primary inputs: license profile (E5, E7,
@@ -82,13 +83,14 @@ export default function HomePage() {
             for the sourcing behind every number.
           </p>
           <p>
-            Microsoft auto-includes a free SCU pool with paid Microsoft 365 E5 and E7
-            using the formula{" "}
+            Microsoft auto-includes a free SCU pool with paid Microsoft 365 E5 and E7 at{" "}
             <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text)]">
-              min(10000, paid_E5_users / 1000 × 400)
+              0.4 SCU × paid_E5_users
             </code>{" "}
-            SCU per month, capped at 10,000. The pool resets on the 1st of each month and
-            unused SCUs do not roll over. Consumption beyond the pool bills as overage at
+            per month, capped at 10,000 SCU — the cap is hit at 25,000 paid licenses.
+            (Microsoft&apos;s docs phrase the same rate as &ldquo;400 SCU per 1,000
+            paid licenses.&rdquo;) The pool resets on the 1st of each month and unused
+            SCUs do not roll over. Consumption beyond the pool bills as overage at
             $6 USD per SCU, billed at one-decimal precision. E3 is not part of the
             inclusion — see the{" "}
             <Link

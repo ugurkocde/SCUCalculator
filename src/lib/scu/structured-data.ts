@@ -35,7 +35,7 @@ export const buildSoftwareApplicationLd = () => ({
   },
   isAccessibleForFree: true,
   featureList: [
-    "E5 and E7 included SCU formula: min(10000, paid_E5_users / 1000 * 400)",
+    "E5 and E7 included SCU pool: 0.4 SCU per paid license, capped at 10,000/month",
     "Per-agent SCU consumption catalogue with provenance labels",
     "Multi-currency cost estimates",
     "Microsoft Learn citations and methodology transparency",

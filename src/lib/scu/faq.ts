@@ -15,7 +15,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     id: "scus-included-in-e5",
     question: "Are SCUs included with Microsoft 365 E5?",
     answer:
-      "Yes. Microsoft began auto-provisioning SCUs to paid Microsoft 365 E5 and E7 subscriptions in November 2025, with global rollout completing by mid-2026. The included pool is calculated as min(10,000, paid_E5_users / 1,000 x 400) SCU per month, capped at 10,000. A tenant with 5,000 paid E5 users receives 2,000 included SCU per month.",
+      "Yes. Microsoft began auto-provisioning SCUs to paid Microsoft 365 E5 and E7 subscriptions in November 2025, with global rollout completing by mid-2026. The included pool is 0.4 SCU per paid E5/E7 license per month, capped at 10,000 SCU/month — the cap is reached at exactly 25,000 paid licenses. Microsoft's documentation phrases the same rate as 400 SCUs per 1,000 paid licenses; both produce identical math. A tenant with 5,000 paid E5 users therefore receives 2,000 included SCU per month.",
   },
   {
     id: "scus-included-in-e3",

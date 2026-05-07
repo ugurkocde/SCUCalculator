@@ -161,7 +161,7 @@ export const CalculationTrace = ({ input, output }: CalculationTraceProps) => {
           </span>
           <span className="flex-1 text-[color:var(--color-text-muted)]">
             {isE5
-              ? `min(10,000, ${input.e5PaidUserLicenses.toLocaleString()} / 1,000 × 400)`
+              ? `min(10,000, 0.4 × ${input.e5PaidUserLicenses.toLocaleString()})`
               : "no included pool"}
           </span>
           <span className="tabular-nums text-[color:var(--color-text)]">

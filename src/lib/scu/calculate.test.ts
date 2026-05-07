@@ -115,7 +115,7 @@ describe("calculateScuEstimate", () => {
     const e5Output = calculateScuEstimate(e5);
 
     expect(e3Output.warnings.join(" ")).toContain("E3 scenario");
-    expect(e5Output.warnings.join(" ")).toContain("400 SCUs per 1,000");
+    expect(e5Output.warnings.join(" ")).toContain("0.4 SCU per paid E5/E7 license");
   });
 
   it("recommends a provisioned commitment that saves money when overage is large", () => {

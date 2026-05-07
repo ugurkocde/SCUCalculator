@@ -269,7 +269,7 @@ export const ScuFlowDiagram = () => {
         <FlowStep
           index={2}
           title="Included pool"
-          hint="e.g. 400 SCU/month, resets on the 1st, doesn't roll over"
+          hint="0.4 SCU per paid E5 license, capped at 10,000/mo, resets on the 1st"
         >
           <PoolIcon />
         </FlowStep>

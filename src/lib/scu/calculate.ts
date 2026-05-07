@@ -111,7 +111,7 @@ const buildWarnings = (
 
   if (input.licenseTier === "e5_security") {
     warnings.push(
-      "E5 monthly included SCUs are modeled with the published formula: 400 SCUs per 1,000 paid E5 users, capped at 10,000.",
+      "E5 monthly included SCUs are modeled at 0.4 SCU per paid E5/E7 license (equivalent to 400 SCUs per 1,000 licenses in Microsoft's docs), capped at 10,000 SCU/month — the cap is reached at 25,000 paid licenses.",
     );
 
     if (input.includedPoolTier === "custom") {

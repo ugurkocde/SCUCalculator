@@ -42,9 +42,13 @@ export default function MethodologyPage() {
             <li>
               <strong className="text-[color:var(--color-text)]">Included pool</strong>: for M365 E5 or E7 tenants,
               <code className="mx-1 rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-[color:var(--color-text)]">
-                min(10000, paid_E5_users / 1000 × 400)
+                min(10000, 0.4 × paid_E5_users)
               </code>
-              SCU per month. Capped at 10,000 SCU per month.
+              SCU per month — i.e. <strong className="text-[color:var(--color-text)]">0.4 SCU per
+              paid E5/E7 license</strong>, capped at 10,000 SCU/month. The cap is reached at exactly
+              25,000 paid licenses (25,000 × 0.4 = 10,000). Microsoft&apos;s public doc phrases the
+              same rate as &ldquo;400 SCUs per 1,000 paid licenses&rdquo; — that&apos;s an
+              equivalent illustration, not a separate rule.
             </li>
             <li>
               <strong className="text-[color:var(--color-text)]">Workload</strong>:{" "}

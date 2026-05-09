@@ -12,6 +12,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
       "A Security Compute Unit (SCU) is a unit of compute capacity Microsoft uses to meter Security Copilot consumption. In provisioned mode you commit to N SCUs per hour at a flat rate; in E5/E7 inclusion and overage modes, SCUs are deducted per consumed operation at one-decimal precision. Microsoft does not publish per-operation SCU rates; the figures of 3 SCU per prompt, 0.5 SCU per incident summary, and 3.7 SCU per promptbook appear in Microsoft Learn's billing-math examples as teaching scenarios, not benchmarks. Real consumption depends on operation complexity and is only visible in your tenant's usage dashboard.",
   },
   {
+    id: "how-to-calculate-scu",
+    question: "How do I calculate SCU cost for Microsoft Security Copilot?",
+    answer:
+      "To calculate Security Copilot SCU cost: (1) determine your included pool — paid Microsoft 365 E5 and E7 tenants get 0.4 SCU per license per month, capped at 10,000 SCU/month; (2) estimate monthly consumption by summing chat-administrator usage (admins × messages per workday × ~3 SCU per prompt × 22 working days) and per-agent runs (run count × documented or estimated SCU per run); (3) subtract the included pool from total consumption, then multiply any remainder by $6 USD per SCU for overage, or commit to N SCUs at $4 USD per SCU per hour for provisioned capacity. This calculator runs that math automatically — pick a license profile, enter admin workload, select agents, and the monthly cost appears instantly.",
+  },
+  {
     id: "scus-included-in-e5",
     question: "Are SCUs included with Microsoft 365 E5?",
     answer:

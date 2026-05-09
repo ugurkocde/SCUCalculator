@@ -13,9 +13,12 @@ import {
 } from "~/lib/scu/structured-data";
 
 export const metadata: Metadata = {
-  title: "Microsoft Security Copilot SCU Calculator — Free Pricing Estimator",
+  // Homepage title intentionally bypasses the layout template ("%s | SCU Calculator")
+  // because the brand is already in the title. Kept under 60 chars so Google does
+  // not truncate the SERP listing.
+  title: "Security Copilot SCU Calculator — Free Cost Estimator",
   description:
-    "Estimate Microsoft Security Copilot SCU cost in under 60 seconds. Includes the M365 E5 and E7 auto-inclusion formula and per-agent SCU consumption. No Azure login required.",
+    "Free Microsoft Security Copilot pricing calculator. Estimate monthly SCU cost with the official E5 and E7 inclusion formula and per-agent consumption rates.",
   alternates: { canonical: "/" },
 };
 
@@ -36,9 +39,11 @@ export default function HomePage() {
       </h1>
       <section className="sr-only" aria-label="About this calculator">
         <p>
-          The SCU Calculator is a free Microsoft Security Copilot pricing tool
-          built and maintained by Ugur Koc, a Microsoft MVP. It estimates monthly
-          Security Compute Unit (SCU) cost using formulas published by Microsoft.
+          Use this tool to calculate Microsoft Security Copilot SCU cost in
+          under 60 seconds. The SCU Calculator is a free pricing tool built
+          and maintained by Ugur Koc, a Microsoft MVP. It estimates monthly
+          Security Compute Unit (SCU) cost using formulas published by
+          Microsoft.
         </p>
         <p>
           A Security Compute Unit (SCU) is the metering unit Microsoft uses to

@@ -6,7 +6,9 @@ export const contentType = "image/png";
 
 const BG_RAISED = "#1f2229";
 const ACCENT = "#5aa3d6";
-const ACCENT_FG = "#bcdaf0";
+const BAR_DIM = "#7fb6dd";
+const BAR_MID = "#a9d0ea";
+const BAR_BRIGHT = "#dfeefa";
 
 export default function Icon() {
   return new ImageResponse(
@@ -33,8 +35,7 @@ export default function Icon() {
             width: 8,
             height: 4,
             borderRadius: 2,
-            background: ACCENT_FG,
-            opacity: 0.35,
+            background: BAR_DIM,
           }}
         />
         <div
@@ -43,8 +44,7 @@ export default function Icon() {
             width: 12,
             height: 4,
             borderRadius: 2,
-            background: ACCENT_FG,
-            opacity: 0.65,
+            background: BAR_MID,
           }}
         />
         <div
@@ -53,8 +53,7 @@ export default function Icon() {
             width: 18,
             height: 4,
             borderRadius: 2,
-            background: ACCENT_FG,
-            opacity: 1,
+            background: BAR_BRIGHT,
           }}
         />
       </div>

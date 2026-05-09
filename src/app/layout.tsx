@@ -53,6 +53,7 @@ export const metadata: Metadata = {
   category: "technology",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/icon", type: "image/png", sizes: "32x32" },
     ],

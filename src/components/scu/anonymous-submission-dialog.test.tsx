@@ -98,12 +98,8 @@ describe("AnonymousSubmissionDialog", () => {
       "north_america",
     );
     await user.selectOptions(
-      within(dialog).getByLabelText("Industry"),
-      "technology",
-    );
-    await user.click(within(dialog).getByLabelText("Microsoft Sentinel"));
-    await user.click(
-      within(dialog).getByLabelText("Microsoft first-party agents"),
+      within(dialog).getByLabelText("Paid users"),
+      "1000_4999",
     );
     await user.click(
       within(dialog).getByLabelText(
@@ -131,9 +127,7 @@ describe("AnonymousSubmissionDialog", () => {
     expect(body.observedMonthlyCostUsd).toBe(1250);
     expect(body.environment).toEqual({
       regionBand: "north_america",
-      industryCategory: "technology",
-      productsUsed: ["sentinel"],
-      agentCategories: ["microsoft_first_party"],
+      paidUserBand: "1000_4999",
     });
     expect(body.consentAccepted).toBe(true);
     expect(body.consentVersion).toBe("anonymous-submissions-v1");

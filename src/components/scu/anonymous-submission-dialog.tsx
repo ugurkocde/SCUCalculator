@@ -30,19 +30,6 @@ const regionOptions = [
   { value: "global_multi_region", label: "Global or multi-region" },
 ] as const satisfies readonly Option[];
 
-const industryOptions = [
-  unknownOption,
-  { value: "financial_services", label: "Financial services" },
-  { value: "healthcare", label: "Healthcare" },
-  { value: "public_sector", label: "Public sector" },
-  { value: "technology", label: "Technology" },
-  { value: "manufacturing", label: "Manufacturing" },
-  { value: "retail", label: "Retail" },
-  { value: "education", label: "Education" },
-  { value: "other_regulated", label: "Other regulated" },
-  { value: "other_commercial", label: "Other commercial" },
-] as const satisfies readonly Option[];
-
 const paidUserBandOptions = [
   unknownOption,
   { value: "1_249", label: "1-249" },
@@ -52,67 +39,23 @@ const paidUserBandOptions = [
   { value: "25000_plus", label: "25,000+" },
 ] as const satisfies readonly Option[];
 
-const activeAdminBandOptions = [
-  unknownOption,
-  { value: "1_4", label: "1-4" },
-  { value: "5_14", label: "5-14" },
-  { value: "15_49", label: "15-49" },
-  { value: "50_199", label: "50-199" },
-  { value: "200_plus", label: "200+" },
-] as const satisfies readonly Option[];
-
-const productOptions = [
-  { value: "security_copilot_portal", label: "Security Copilot portal" },
-  { value: "defender_xdr", label: "Microsoft Defender XDR" },
-  { value: "sentinel", label: "Microsoft Sentinel" },
-  { value: "intune", label: "Microsoft Intune" },
-  { value: "entra", label: "Microsoft Entra" },
-  { value: "purview", label: "Microsoft Purview" },
-] as const satisfies readonly Option[];
-
-const agentCategoryOptions = [
-  { value: "microsoft_first_party", label: "Microsoft first-party agents" },
-  { value: "custom_agents", label: "Custom agents" },
-  { value: "partner_agents", label: "Partner agents" },
-  { value: "automation_playbooks", label: "Automation or playbooks" },
-  { value: "none_unsure", label: "None or unsure" },
-] as const satisfies readonly Option[];
-
 type RegionBand = Exclude<
   (typeof regionOptions)[number]["value"],
-  typeof UNKNOWN_VALUE
->;
-type IndustryCategory = Exclude<
-  (typeof industryOptions)[number]["value"],
   typeof UNKNOWN_VALUE
 >;
 type PaidUserBand = Exclude<
   (typeof paidUserBandOptions)[number]["value"],
   typeof UNKNOWN_VALUE
 >;
-type ActiveAdminBand = Exclude<
-  (typeof activeAdminBandOptions)[number]["value"],
-  typeof UNKNOWN_VALUE
->;
-type ProductUsed = (typeof productOptions)[number]["value"];
-type AgentCategory = (typeof agentCategoryOptions)[number]["value"];
 
 interface AnonymousSubmissionFormState {
   regionBand: UnknownOr<RegionBand>;
-  industryCategory: UnknownOr<IndustryCategory>;
   paidUserBand: UnknownOr<PaidUserBand>;
-  activeAdminBand: UnknownOr<ActiveAdminBand>;
-  productsUsed: ProductUsed[];
-  agentCategories: AgentCategory[];
 }
 
 interface SubmissionEnvironmentPayload {
   regionBand?: RegionBand;
-  industryCategory?: IndustryCategory;
   paidUserBand?: PaidUserBand;
-  activeAdminBand?: ActiveAdminBand;
-  productsUsed?: ProductUsed[];
-  agentCategories?: AgentCategory[];
 }
 
 interface AnonymousSubmissionPayload {
@@ -131,11 +74,7 @@ interface AnonymousSubmissionDialogProps {
 
 const initialFormState: AnonymousSubmissionFormState = {
   regionBand: UNKNOWN_VALUE,
-  industryCategory: UNKNOWN_VALUE,
   paidUserBand: UNKNOWN_VALUE,
-  activeAdminBand: UNKNOWN_VALUE,
-  productsUsed: [],
-  agentCategories: [],
 };
 
 const labelClass =
@@ -154,11 +93,6 @@ const parseNonNegativeNumber = (value: string): number | null => {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 };
 
-const toggleValue = <T extends string>(values: T[], value: T): T[] =>
-  values.includes(value)
-    ? values.filter((current) => current !== value)
-    : [...values, value];
-
 const buildEnvironmentPayload = (
   form: AnonymousSubmissionFormState,
 ): SubmissionEnvironmentPayload => {
@@ -167,58 +101,12 @@ const buildEnvironmentPayload = (
   if (form.regionBand !== UNKNOWN_VALUE) {
     environment.regionBand = form.regionBand;
   }
-  if (form.industryCategory !== UNKNOWN_VALUE) {
-    environment.industryCategory = form.industryCategory;
-  }
   if (form.paidUserBand !== UNKNOWN_VALUE) {
     environment.paidUserBand = form.paidUserBand;
-  }
-  if (form.activeAdminBand !== UNKNOWN_VALUE) {
-    environment.activeAdminBand = form.activeAdminBand;
-  }
-  if (form.productsUsed.length > 0) {
-    environment.productsUsed = form.productsUsed;
-  }
-  if (form.agentCategories.length > 0) {
-    environment.agentCategories = form.agentCategories;
   }
 
   return environment;
 };
-
-const CheckboxGroup = <T extends string>({
-  legend,
-  options,
-  values,
-  onToggle,
-}: {
-  legend: string;
-  options: readonly Option<T>[];
-  values: T[];
-  onToggle: (value: T) => void;
-}) => (
-  <fieldset className="space-y-2">
-    <legend className={labelClass}>{legend}</legend>
-    <div className="grid gap-2 sm:grid-cols-2">
-      {options.map((option) => (
-        <label
-          key={option.value}
-          className="flex min-h-11 items-center gap-2 rounded-md border border-[color:var(--color-hairline)] bg-white/[0.02] px-3 py-2 text-xs text-[color:var(--color-text-muted)]"
-        >
-          <input
-            type="checkbox"
-            checked={values.includes(option.value)}
-            onChange={() => {
-              onToggle(option.value);
-            }}
-            className="h-4 w-4 accent-[color:var(--color-accent)]"
-          />
-          <span>{option.label}</span>
-        </label>
-      ))}
-    </div>
-  </fieldset>
-);
 
 export const AnonymousSubmissionDialog = ({
   input,
@@ -409,7 +297,7 @@ export const AnonymousSubmissionDialog = ({
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm sm:items-center"
+          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/90 px-4 py-6 backdrop-blur-md sm:items-center"
           role="presentation"
           onMouseDown={(event) => {
             if (
@@ -427,7 +315,7 @@ export const AnonymousSubmissionDialog = ({
             aria-modal="true"
             aria-labelledby="anonymous-submission-title"
             aria-describedby="anonymous-submission-description"
-            className="w-full max-w-2xl rounded-2xl border border-[color:var(--color-hairline)] bg-[color:var(--color-bg-raised)] p-5 text-[color:var(--color-text)] shadow-[0_24px_80px_-24px_oklch(0_0_0_/_0.75)] focus:outline-none sm:p-6"
+            className="w-full max-w-md rounded-2xl border border-[color:var(--color-hairline)] bg-[color:var(--color-bg-raised)] p-5 text-[color:var(--color-text)] shadow-[0_24px_80px_-24px_oklch(0_0_0_/_0.75)] focus:outline-none sm:p-6"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -441,16 +329,15 @@ export const AnonymousSubmissionDialog = ({
                 </h2>
                 <p
                   id="anonymous-submission-description"
-                  className="mt-1 max-w-2xl text-sm leading-5 text-[color:var(--color-text-muted)]"
+                  className="mt-1 text-sm leading-5 text-[color:var(--color-text-muted)]"
                 >
-                  Help build a community benchmark for Security Compute Unit
-                  pricing. Your contribution stays anonymous.
+                  Anonymous benchmark contribution &mdash; takes 15 seconds.
                 </p>
               </div>
               <button
                 type="button"
                 aria-label="Close dialog"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[color:var(--color-hairline)] bg-white/[0.02] text-base text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-[color:var(--color-hairline)] bg-white/[0.02] text-base text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]"
                 onClick={() => {
                   if (status !== "submitting") {
                     setOpen(false);
@@ -461,120 +348,65 @@ export const AnonymousSubmissionDialog = ({
               </button>
             </div>
 
-            <div className="mt-4 rounded-md border border-[color:var(--color-accent)]/30 bg-[color:var(--color-accent)]/[0.06] p-3 text-xs leading-5 text-[color:var(--color-text-muted)]">
-              <p className="font-semibold text-[color:var(--color-text)]">
-                What we collect
-              </p>
-              <p className="mt-1">
-                Your observed monthly SCU, optional cost in USD, and the coarse
-                environment fields you select below.
-              </p>
-              <p className="mt-3 font-semibold text-[color:var(--color-text)]">
-                What we never collect
-              </p>
-              <p className="mt-1">
-                No email, tenant ID, company name, domain, free-text notes, IP
-                address, or raw user agent is stored with your submission.
-              </p>
-            </div>
+            <div className="mt-4 space-y-4">
+              <label className="block">
+                <span className={labelClass}>
+                  Observed monthly SCU
+                  <span
+                    aria-hidden="true"
+                    className="ml-1 text-[color:var(--color-accent)]"
+                  >
+                    *
+                  </span>
+                </span>
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  inputMode="decimal"
+                  value={observedMonthlyScuRaw}
+                  onChange={(event) => {
+                    setObservedMonthlyScuRaw(event.target.value);
+                  }}
+                  placeholder="e.g. 1200"
+                  className={fieldClass}
+                  aria-invalid={
+                    observedMonthlyScuRaw.trim() !== "" &&
+                    observedMonthlyScu === null
+                  }
+                  aria-required="true"
+                  required
+                />
+              </label>
 
-            <div className="mt-5 space-y-5">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <label>
-                  <span className={labelClass}>
-                    Observed monthly SCU
-                    <span
-                      aria-hidden="true"
-                      className="ml-1 text-[color:var(--color-accent)]"
-                    >
-                      *
-                    </span>
+              <label className="block">
+                <span className={labelClass}>
+                  Observed monthly cost USD
+                  <span className="ml-1 font-normal normal-case tracking-normal text-[color:var(--color-text-subtle)]">
+                    (optional)
                   </span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    inputMode="decimal"
-                    value={observedMonthlyScuRaw}
-                    onChange={(event) => {
-                      setObservedMonthlyScuRaw(event.target.value);
-                    }}
-                    className={fieldClass}
-                    aria-invalid={
-                      observedMonthlyScuRaw.trim() !== "" &&
-                      observedMonthlyScu === null
-                    }
-                    aria-required="true"
-                    required
-                  />
-                </label>
-                <label>
-                  <span className={labelClass}>
-                    Observed monthly cost USD
-                    <span className="ml-1 font-normal normal-case tracking-normal text-[color:var(--color-text-subtle)]">
-                      (optional)
-                    </span>
-                  </span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    inputMode="decimal"
-                    value={observedMonthlyCostUsdRaw}
-                    onChange={(event) => {
-                      setObservedMonthlyCostUsdRaw(event.target.value);
-                    }}
-                    className={fieldClass}
-                    aria-invalid={
-                      observedMonthlyCostUsdRaw.trim() !== "" &&
-                      observedMonthlyCostUsd === null
-                    }
-                  />
-                </label>
-              </div>
+                </span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  inputMode="decimal"
+                  value={observedMonthlyCostUsdRaw}
+                  onChange={(event) => {
+                    setObservedMonthlyCostUsdRaw(event.target.value);
+                  }}
+                  placeholder="e.g. 7200"
+                  className={fieldClass}
+                  aria-invalid={
+                    observedMonthlyCostUsdRaw.trim() !== "" &&
+                    observedMonthlyCostUsd === null
+                  }
+                />
+              </label>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <label>
-                  <span className={labelClass}>Region</span>
-                  <select
-                    value={form.regionBand}
-                    onChange={(event) => {
-                      setForm((current) => ({
-                        ...current,
-                        regionBand: event.target.value as UnknownOr<RegionBand>,
-                      }));
-                    }}
-                    className={fieldClass}
-                  >
-                    {regionOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  <span className={labelClass}>Industry</span>
-                  <select
-                    value={form.industryCategory}
-                    onChange={(event) => {
-                      setForm((current) => ({
-                        ...current,
-                        industryCategory: event.target
-                          .value as UnknownOr<IndustryCategory>,
-                      }));
-                    }}
-                    className={fieldClass}
-                  >
-                    {industryOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  <span className={labelClass}>Paid user range</span>
+                <label className="block">
+                  <span className={labelClass}>Paid users</span>
                   <select
                     value={form.paidUserBand}
                     onChange={(event) => {
@@ -593,20 +425,19 @@ export const AnonymousSubmissionDialog = ({
                     ))}
                   </select>
                 </label>
-                <label>
-                  <span className={labelClass}>Active admins</span>
+                <label className="block">
+                  <span className={labelClass}>Region</span>
                   <select
-                    value={form.activeAdminBand}
+                    value={form.regionBand}
                     onChange={(event) => {
                       setForm((current) => ({
                         ...current,
-                        activeAdminBand: event.target
-                          .value as UnknownOr<ActiveAdminBand>,
+                        regionBand: event.target.value as UnknownOr<RegionBand>,
                       }));
                     }}
                     className={fieldClass}
                   >
-                    {activeAdminBandOptions.map((option) => (
+                    {regionOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -615,34 +446,12 @@ export const AnonymousSubmissionDialog = ({
                 </label>
               </div>
 
-              <CheckboxGroup
-                legend="Products used (optional)"
-                options={productOptions}
-                values={form.productsUsed}
-                onToggle={(value) => {
-                  setForm((current) => ({
-                    ...current,
-                    productsUsed: toggleValue(current.productsUsed, value),
-                  }));
-                }}
-              />
+              <p className="text-[11px] leading-5 text-[color:var(--color-text-subtle)]">
+                No email, tenant ID, company name, domain, free-text notes,
+                IP address, or raw user agent is stored.
+              </p>
 
-              <CheckboxGroup
-                legend="Agent categories (optional)"
-                options={agentCategoryOptions}
-                values={form.agentCategories}
-                onToggle={(value) => {
-                  setForm((current) => ({
-                    ...current,
-                    agentCategories: toggleValue(
-                      current.agentCategories,
-                      value,
-                    ),
-                  }));
-                }}
-              />
-
-              <label className="flex items-start gap-3 rounded-md border border-[color:var(--color-hairline)] bg-white/[0.02] p-3 text-sm leading-5 text-[color:var(--color-text-muted)]">
+              <label className="flex items-start gap-3 text-sm leading-5 text-[color:var(--color-text-muted)]">
                 <input
                   type="checkbox"
                   checked={consentAccepted}
@@ -665,15 +474,6 @@ export const AnonymousSubmissionDialog = ({
               </label>
 
               <div className="min-h-6 text-xs" aria-live="polite">
-                {status === "idle" ? (
-                  <p className="text-[color:var(--color-text-muted)]">
-                    {observedMonthlyScu === null
-                      ? "Enter your observed monthly SCU to continue."
-                      : !consentAccepted
-                        ? "Check the consent box to submit."
-                        : "Ready to submit."}
-                  </p>
-                ) : null}
                 {status === "submitting" ? (
                   <p className="text-[color:var(--color-text-muted)]">
                     Submitting&hellip;

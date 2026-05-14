@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { ANONYMOUS_SUBMISSION_CONSENT_VERSION } from "~/lib/scu/submission-schema";
 import { type CalculatorInput } from "~/lib/scu/types";
@@ -289,25 +290,19 @@ export const AnonymousSubmissionDialog = ({
     }
   }, [canSubmit, payload]);
 
-  return (
-    <>
-      <button type="button" className={buttonClassName} onClick={resetForOpen}>
-        Contribute anonymous benchmark
-      </button>
-
-      {open ? (
-        <div
-          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/90 px-4 py-6 backdrop-blur-md sm:items-center"
-          role="presentation"
-          onMouseDown={(event) => {
-            if (
-              event.target === event.currentTarget &&
-              status !== "submitting"
-            ) {
-              setOpen(false);
-            }
-          }}
-        >
+  const overlay = open ? (
+    <div
+      className="fixed inset-0 z-[2147483000] flex items-start justify-center overflow-y-auto bg-black/90 px-4 py-6 backdrop-blur-md sm:items-center"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (
+          event.target === event.currentTarget &&
+          status !== "submitting"
+        ) {
+          setOpen(false);
+        }
+      }}
+    >
           <section
             ref={dialogRef}
             tabIndex={-1}
@@ -532,7 +527,16 @@ export const AnonymousSubmissionDialog = ({
             </div>
           </section>
         </div>
-      ) : null}
+  ) : null;
+
+  return (
+    <>
+      <button type="button" className={buttonClassName} onClick={resetForOpen}>
+        Contribute anonymous benchmark
+      </button>
+      {overlay && typeof document !== "undefined"
+        ? createPortal(overlay, document.body)
+        : null}
     </>
   );
 };

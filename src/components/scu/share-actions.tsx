@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { AnonymousSubmissionDialog } from "~/components/scu/anonymous-submission-dialog";
 import { buildEmailSummary } from "~/lib/scu/summary";
 import { type CalculatorInput, type CalculatorOutput } from "~/lib/scu/types";
 
@@ -78,7 +77,6 @@ export const ShareActions = ({
             ? "Copy failed"
             : "Copy summary for email"}
       </button>
-      <AnonymousSubmissionDialog input={input} buttonClassName={buttonClass} />
     </div>
   );
 };

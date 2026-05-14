@@ -4,6 +4,7 @@ import { type ChangeEvent, type FocusEvent } from "react";
 
 import { CalculationTrace } from "~/components/scu/calculation-trace";
 import { CalculatorResults } from "~/components/scu/results";
+import { CommunityBenchmark } from "~/components/scu/community-benchmark";
 import { FxSelector } from "~/components/scu/fx";
 import { ShareActions } from "~/components/scu/share-actions";
 import {
@@ -345,6 +346,7 @@ export const QuickEstimate = ({
               <ShareActions input={input} output={output} shareUrl={shareUrl} />
             }
           />
+          <CommunityBenchmark input={input} />
         </div>
       </div>
     </section>

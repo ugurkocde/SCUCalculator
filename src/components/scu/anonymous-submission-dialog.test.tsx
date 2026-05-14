@@ -3,8 +3,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ShareActions } from "~/components/scu/share-actions";
-import { calculateScuEstimate } from "~/lib/scu/calculate";
+import { AnonymousSubmissionDialog } from "~/components/scu/anonymous-submission-dialog";
 import { DEFAULT_INPUT } from "~/lib/scu/constants";
 import { anonymousSubmissionRequestSchema } from "~/lib/scu/submission-schema";
 
@@ -18,21 +17,19 @@ beforeEach(() => {
   globalThis.fetch = fetchMock as unknown as typeof fetch;
 });
 
-const renderShareActions = () => {
-  const output = calculateScuEstimate(DEFAULT_INPUT);
-
+const renderDialog = (onSubmitted?: () => void) => {
   render(
-    <ShareActions
+    <AnonymousSubmissionDialog
       input={DEFAULT_INPUT}
-      output={output}
-      shareUrl="https://scucalculator.test/share"
+      buttonClassName="test-trigger"
+      onSubmitted={onSubmitted}
     />,
   );
 };
 
 const openDialog = async (user: ReturnType<typeof userEvent.setup>) => {
   await user.click(
-    screen.getByRole("button", { name: "Contribute anonymous benchmark" }),
+    screen.getByRole("button", { name: /Contribute anonymous benchmark|Share your SCU usage/ }),
   );
   return screen.getByRole("dialog", { name: "Share your monthly SCU usage" });
 };
@@ -60,9 +57,9 @@ describe("AnonymousSubmissionDialog", () => {
     );
   };
 
-  it("opens from share actions and keeps submit disabled without consent", async () => {
+  it("opens from the trigger and keeps submit disabled without consent", async () => {
     const user = userEvent.setup();
-    renderShareActions();
+    renderDialog();
     const dialog = await openDialog(user);
 
     expect(dialog).toBeInTheDocument();
@@ -80,9 +77,10 @@ describe("AnonymousSubmissionDialog", () => {
     ).toBeDisabled();
   });
 
-  it("submits with only the selected environment fields and shows a success state", async () => {
+  it("submits with only the selected environment fields and fires onSubmitted", async () => {
     const user = userEvent.setup();
-    renderShareActions();
+    const onSubmitted = vi.fn();
+    renderDialog(onSubmitted);
     const dialog = await openDialog(user);
 
     await user.type(
@@ -144,11 +142,12 @@ describe("AnonymousSubmissionDialog", () => {
     expect(
       within(dialog).queryByRole("button", { name: "Submit benchmark" }),
     ).not.toBeInTheDocument();
+    expect(onSubmitted).toHaveBeenCalledTimes(1);
   });
 
   it("omits all environment fields when the user keeps the default 'Prefer not to say' selections", async () => {
     const user = userEvent.setup();
-    renderShareActions();
+    renderDialog();
     const dialog = await openDialog(user);
 
     await user.type(
@@ -179,7 +178,7 @@ describe("AnonymousSubmissionDialog", () => {
     const user = userEvent.setup();
     fetchMock.mockResolvedValue(new Response(null, { status: 500 }));
 
-    renderShareActions();
+    renderDialog();
     const dialog = await openDialog(user);
 
     await user.type(within(dialog).getByLabelText(/Observed monthly SCU/), "1");

@@ -71,6 +71,8 @@ interface AnonymousSubmissionPayload {
 interface AnonymousSubmissionDialogProps {
   input: CalculatorInput;
   buttonClassName: string;
+  buttonLabel?: string;
+  onSubmitted?: () => void;
 }
 
 const initialFormState: AnonymousSubmissionFormState = {
@@ -112,6 +114,8 @@ const buildEnvironmentPayload = (
 export const AnonymousSubmissionDialog = ({
   input,
   buttonClassName,
+  buttonLabel = "Contribute anonymous benchmark",
+  onSubmitted,
 }: AnonymousSubmissionDialogProps) => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<SubmissionStatus>("idle");
@@ -261,6 +265,7 @@ export const AnonymousSubmissionDialog = ({
 
       if (response.ok) {
         setStatus("success");
+        onSubmitted?.();
         return;
       }
 
@@ -288,7 +293,7 @@ export const AnonymousSubmissionDialog = ({
         "We couldn't reach the server. Check your connection and retry.",
       );
     }
-  }, [canSubmit, payload]);
+  }, [canSubmit, onSubmitted, payload]);
 
   const overlay = open ? (
     <div
@@ -532,7 +537,7 @@ export const AnonymousSubmissionDialog = ({
   return (
     <>
       <button type="button" className={buttonClassName} onClick={resetForOpen}>
-        Contribute anonymous benchmark
+        {buttonLabel}
       </button>
       {overlay && typeof document !== "undefined"
         ? createPortal(overlay, document.body)

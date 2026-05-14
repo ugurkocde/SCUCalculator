@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { AnonymousSubmissionDialog } from "~/components/scu/anonymous-submission-dialog";
 import { buildEmailSummary } from "~/lib/scu/summary";
 import { type CalculatorInput, type CalculatorOutput } from "~/lib/scu/types";
 
@@ -16,14 +17,15 @@ type Status = "idle" | "copied" | "error";
 const buttonClass =
   "rounded-md border border-[color:var(--color-hairline)] bg-white/[0.02] px-3 py-1.5 text-xs font-medium text-[color:var(--color-text-muted)] hover:border-[color:var(--color-accent)]/50 hover:text-[color:var(--color-accent-fg)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]";
 
-export const ShareActions = ({ input, output, shareUrl }: ShareActionsProps) => {
+export const ShareActions = ({
+  input,
+  output,
+  shareUrl,
+}: ShareActionsProps) => {
   const [linkStatus, setLinkStatus] = useState<Status>("idle");
   const [emailStatus, setEmailStatus] = useState<Status>("idle");
 
-  const announce = (
-    setStatus: (next: Status) => void,
-    next: Status,
-  ): void => {
+  const announce = (setStatus: (next: Status) => void, next: Status): void => {
     setStatus(next);
     if (next !== "idle") {
       window.setTimeout(() => {
@@ -76,6 +78,7 @@ export const ShareActions = ({ input, output, shareUrl }: ShareActionsProps) => 
             ? "Copy failed"
             : "Copy summary for email"}
       </button>
+      <AnonymousSubmissionDialog input={input} buttonClassName={buttonClass} />
     </div>
   );
 };

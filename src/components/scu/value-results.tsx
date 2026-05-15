@@ -259,7 +259,7 @@ const AgentRowCard = ({ row, onChange }: AgentRowCardProps) => {
         </div>
         <div>
           <dt className="text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-text-subtle)]">
-            Value / mo
+            Savings / mo
           </dt>
           <dd className="mt-1 font-mono text-sm tabular-nums text-[color:var(--color-text)]">
             {formatUsd(row.monthlyValueUsd)}
@@ -315,12 +315,12 @@ const TotalsBar = ({ snapshot }: TotalsBarProps) => {
 
   return (
     <section
-      aria-label="Monthly totals across included agents"
+      aria-label="Monthly savings across included agents"
       className="sticky top-0 z-10 rounded-2xl border border-[color:var(--color-accent)]/30 bg-[color:var(--color-bg-raised)]/95 p-5 backdrop-blur-md"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-accent-fg)]">
-          Monthly net value
+          Net monthly savings
         </p>
         <p className="text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-text-subtle)]">
           {totals.includedAgentCount} of {snapshot.rows.length} agents included
@@ -348,7 +348,7 @@ const TotalsBar = ({ snapshot }: TotalsBarProps) => {
         </div>
         <div>
           <dt className="text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-text-subtle)]">
-            Value / mo
+            Savings / mo
           </dt>
           <dd className="mt-1 font-mono text-sm tabular-nums text-[color:var(--color-text)]">
             {formatUsd(totals.monthlyValueUsd)}

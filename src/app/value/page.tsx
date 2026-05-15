@@ -104,11 +104,22 @@ export default function ValuePage() {
             </li>
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">
-                Value = hours saved × your rate.
+                Savings = hours saved × your rate.
               </strong>{" "}
               The rate defaults to $100/hr and is editable above. Loaded labor
               costs vary 2–3x by region and seniority — use a number your team
               recognises.
+            </li>
+            <li>
+              <strong className="font-semibold text-[color:var(--color-text)]">
+                What &ldquo;savings&rdquo; means.
+              </strong>{" "}
+              Hours given back to your team are productivity, not always a
+              direct P&amp;L line. Some hours get reallocated to higher-value
+              work (productivity gain), some avoid headcount growth (real cost
+              avoidance), some enable headcount reduction (direct savings). The
+              dollar figure here is the labour value of the time, computed at
+              your rate — interpret it in your own staffing context.
             </li>
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">

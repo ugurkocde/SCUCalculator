@@ -437,12 +437,25 @@ export const ValueResults = () => {
   const updateOverride = (agentId: string, patch: AgentValueOverride) => {
     setOverrides((current) => {
       const next: AgentValueOverride = { ...(current[agentId] ?? {}) };
-      for (const [key, value] of Object.entries(patch)) {
-        if (value === undefined) {
-          delete next[key as keyof AgentValueOverride];
+      if ("included" in patch) {
+        if (patch.included === undefined) {
+          delete next.included;
         } else {
-          // @ts-expect-error key is a known field of AgentValueOverride
-          next[key] = value;
+          next.included = patch.included;
+        }
+      }
+      if ("runsPerMonth" in patch) {
+        if (patch.runsPerMonth === undefined) {
+          delete next.runsPerMonth;
+        } else {
+          next.runsPerMonth = patch.runsPerMonth;
+        }
+      }
+      if ("hoursSavedPerRun" in patch) {
+        if (patch.hoursSavedPerRun === undefined) {
+          delete next.hoursSavedPerRun;
+        } else {
+          next.hoursSavedPerRun = patch.hoursSavedPerRun;
         }
       }
       return { ...current, [agentId]: next };

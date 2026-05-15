@@ -1,15 +1,14 @@
-import { buildValueSnapshot } from "~/lib/scu/value-aggregator";
+import { buildBaselineValueSnapshot } from "~/lib/scu/value-calculate";
 
 export const runtime = "nodejs";
-export const revalidate = 300;
 
 export const GET = async (): Promise<Response> => {
-  const snapshot = await buildValueSnapshot();
+  const snapshot = buildBaselineValueSnapshot();
 
   return Response.json(snapshot, {
     headers: {
       "cache-control":
-        "public, max-age=300, s-maxage=300, stale-while-revalidate=600",
+        "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
     },
   });
 };

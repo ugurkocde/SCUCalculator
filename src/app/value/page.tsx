@@ -5,48 +5,47 @@ import { JsonLd } from "~/components/scu/json-ld";
 import { ValueResults } from "~/components/scu/value-results";
 import { SITE_URL } from "~/lib/scu/constants";
 import { buildBreadcrumbLd } from "~/lib/scu/structured-data";
-import { buildValueSnapshot } from "~/lib/scu/value-aggregator";
 
 export const metadata: Metadata = {
   title:
-    "Community value — hours saved by Security Copilot use case",
+    "Security Copilot agent value — hours saved and net monthly value per agent",
   description:
-    "Anonymous, decision-maker-reported hours saved per month by Security Copilot use case. Adjust the hourly rate on the page to see a dollar value in your own terms.",
+    "Per-agent ROI for every Microsoft Security Copilot first-party agent: SCU cost, hours saved per run, and net monthly value at your team's hourly rate. Sourced from Microsoft Learn and conservative analyst-handling-time anchors.",
   alternates: { canonical: "/value" },
 };
 
-export const revalidate = 300;
-
-export default async function ValuePage() {
-  const snapshot = await buildValueSnapshot();
-
+export default function ValuePage() {
   return (
     <main className="min-h-screen px-4 pb-24 pt-8 text-[color:var(--color-text)] lg:pb-16 lg:pt-12">
       <JsonLd
         id="ld-breadcrumb"
         data={buildBreadcrumbLd([
           { name: "SCU Calculator", url: `${SITE_URL}/` },
-          { name: "Community value", url: `${SITE_URL}/value` },
+          { name: "Agent value", url: `${SITE_URL}/value` },
         ])}
       />
 
-      <article className="mx-auto w-full max-w-3xl space-y-8">
+      <article className="mx-auto w-full max-w-3xl space-y-6">
         <header className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-accent-fg)]">
-            Community value
+            Agent value
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--color-text)] sm:text-5xl">
-            What teams get back from Security Copilot
+            What each Security Copilot agent is worth
           </h1>
           <p className="text-base leading-relaxed text-[color:var(--color-text-muted)]">
-            Anonymous, decision-maker-reported hours saved per month by use
-            case. The community signal is hours. The dollar figure is computed
-            live from the hourly rate you set below — your number, your call.
+            Per-agent ROI computed from Microsoft&apos;s published SCU rates,
+            conservative analyst-time-saved estimates, and your hourly rate.
+            Every input is transparent and adjustable — your numbers, your call.
           </p>
           <p className="text-sm text-[color:var(--color-text-subtle)]">
-            Looking for the cost side?{" "}
+            Looking for the tenant-level cost?{" "}
+            <Link href="/" className="underline">
+              Use the calculator
+            </Link>
+            . Real-world cost benchmarks:{" "}
             <Link href="/benchmark" className="underline">
-              Community benchmark
+              /benchmark
             </Link>
             . Machine-readable export:{" "}
             <a href="/value.json" className="underline">
@@ -56,7 +55,7 @@ export default async function ValuePage() {
           </p>
         </header>
 
-        <ValueResults snapshot={snapshot} />
+        <ValueResults />
 
         <section
           aria-label="Methodology"
@@ -68,51 +67,76 @@ export default async function ValuePage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">
-                Self-reported.
+                SCU per run.
               </strong>{" "}
-              Hours are decision-maker-reported team aggregates, not measured
-              from logs. Treat as directional, not precise.
+              Where Microsoft publishes a range (e.g. &ldquo;less than one
+              SCU&rdquo;), we anchor to the midpoint and label it{" "}
+              <em>Microsoft (range)</em>. Where Microsoft does not publish at
+              all, we anchor to the incident-summarisation reference (0.5 SCU)
+              from their official billing-math example and label it{" "}
+              <em>estimate</em>. Every agent card shows the provenance under
+              &ldquo;Source notes.&rdquo;
             </li>
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">
-                Selection bias.
+                Hours saved per run.
               </strong>{" "}
-              Teams who feel they get value are more likely to contribute. Read
-              the medians as &ldquo;what successful adopters report&rdquo;, not
-              &ldquo;what an average tenant will see.&rdquo;
+              Microsoft does not currently publish per-agent time-saved figures.
+              Defaults are conservative estimates anchored to independent
+              analyst-handling-time research (SANS, Ponemon, IBM X-Force). They
+              tend to <em>under</em>state value rather than overstate it. Each
+              card shows the reasoning; adjust the value to match your team.
             </li>
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">
-                Rate is illustrative.
+                Cost = SCU/run × runs × $6.
               </strong>{" "}
-              The dollar figure is hours × your rate. We don&apos;t store rates
-              or compute a vendor-imposed dollar figure. Loaded labor costs
-              vary 2–3x by region and seniority — use a number your team
-              recognizes.
+              Uses Microsoft&apos;s published $6/SCU overage rate. Does
+              <em>not</em> subtract the included E5/E7 SCU pool — that&apos;s a
+              tenant-level offset belonging on the{" "}
+              <Link
+                href="/"
+                className="underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-[color:var(--color-accent-fg)]"
+              >
+                calculator
+              </Link>
+              . Per-agent cost shown here is the on-the-meter rate.
             </li>
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">
-                Cohorts under {snapshot.minCohortN} are hidden.
+                Value = hours saved × your rate.
               </strong>{" "}
-              We don&apos;t publish a median until at least {snapshot.minCohortN}{" "}
-              teams have contributed to a use case.
+              The rate defaults to $100/hr and is editable above. Loaded labor
+              costs vary 2–3x by region and seniority — use a number your team
+              recognises.
             </li>
             <li>
               <strong className="font-semibold text-[color:var(--color-text)]">
-                No tenant identifiers.
+                Nothing about your inputs leaves your browser.
               </strong>{" "}
-              No email, tenant ID, company name, domain, free-text notes, IP
-              address, hourly rate, or raw user agent is stored. Contributions
-              are coarse-banded by region and license size if the contributor
-              opts in.
+              All overrides (include toggles, runs/month, hours saved/run,
+              hourly rate) live in <code className="font-mono">localStorage</code>.
+              No tenant identifier, telemetry, or analytics on your numbers.
+            </li>
+            <li>
+              <strong className="font-semibold text-[color:var(--color-text)]">
+                Planning aid, not a guarantee.
+              </strong>{" "}
+              Verify per-run consumption against your tenant&apos;s usage
+              dashboard at{" "}
+              <a
+                href="https://securitycopilot.microsoft.com/usage-monitoring"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-[color:var(--color-accent-fg)]"
+              >
+                securitycopilot.microsoft.com/usage-monitoring
+              </a>{" "}
+              and calibrate the hours-saved estimates against your team&apos;s
+              actual handling-time deltas.
             </li>
           </ul>
         </section>
-
-        <footer className="border-t border-[color:var(--color-hairline)] pt-4 text-xs text-[color:var(--color-text-subtle)]">
-          Snapshot generated {new Date(snapshot.generatedAt).toLocaleString()}.
-          Schema version: <code className="font-mono">{snapshot.schemaVersion}</code>.
-        </footer>
       </article>
     </main>
   );

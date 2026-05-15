@@ -34,6 +34,27 @@ describe("SECURITY_COPILOT_AGENTS catalog", () => {
       expect(agent.docsUrl).toMatch(/^https:\/\/learn\.microsoft\.com\//);
     }
   });
+
+  it("carries a positive defaultHoursSavedPerRun for every agent", () => {
+    for (const agent of SECURITY_COPILOT_AGENTS) {
+      expect(agent.defaultHoursSavedPerRun).toBeGreaterThan(0);
+      expect(Number.isFinite(agent.defaultHoursSavedPerRun)).toBe(true);
+    }
+  });
+
+  it("declares a Microsoft or community-estimate hoursSavedSource for every agent", () => {
+    for (const agent of SECURITY_COPILOT_AGENTS) {
+      expect(["microsoft", "community-estimate"]).toContain(
+        agent.hoursSavedSource,
+      );
+    }
+  });
+
+  it("carries a non-empty hoursSavedSourceNote for every agent", () => {
+    for (const agent of SECURITY_COPILOT_AGENTS) {
+      expect(agent.hoursSavedSourceNote.trim().length).toBeGreaterThan(20);
+    }
+  });
 });
 
 describe("agentScuPerHour", () => {

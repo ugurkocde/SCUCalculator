@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/methodology", priority: 0.7, changeFrequency: "monthly" },
     { path: "/faq", priority: 0.7, changeFrequency: "monthly" },
     { path: "/agents", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/benchmark", priority: 0.8, changeFrequency: "daily" },
   ];
   return routes.map((entry) => ({
     url: `${SITE_URL}${entry.path}`,

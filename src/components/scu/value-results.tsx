@@ -151,40 +151,38 @@ const AgentRowCard = ({ row, onChange }: AgentRowCardProps) => {
           : "border-[color:var(--color-hairline)] bg-[color:var(--color-bg-raised)]"
       }`}
     >
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <label className="flex items-start gap-3">
-          <input
-            type="checkbox"
-            checked={row.included}
-            onChange={(event) => {
-              onChange({ included: event.target.checked });
-            }}
-            className="mt-1 h-4 w-4 accent-[color:var(--color-accent)]"
-            aria-label={`Include ${agent.name} in totals`}
-          />
-          <span>
-            <span
-              className={`text-base font-semibold ${
-                muted
-                  ? "text-[color:var(--color-text-muted)]"
-                  : "text-[color:var(--color-text)]"
-              }`}
-            >
-              {agent.name}
-            </span>
-            <span className="ml-2 inline-flex items-center rounded-full border border-[color:var(--color-hairline)] bg-white/[0.02] px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.16em] text-[color:var(--color-text-subtle)]">
-              {agent.productTag}
-            </span>
+      <header className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          checked={row.included}
+          onChange={(event) => {
+            onChange({ included: event.target.checked });
+          }}
+          className="mt-1 h-4 w-4 accent-[color:var(--color-accent)]"
+          aria-label={`Include ${agent.name} in totals`}
+        />
+        <span className="min-w-0 flex-1">
+          <span
+            className={`text-base font-semibold ${
+              muted
+                ? "text-[color:var(--color-text-muted)]"
+                : "text-[color:var(--color-text)]"
+            }`}
+          >
+            {agent.name}
           </span>
-        </label>
-        <a
-          href={agent.docsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[11px] text-[color:var(--color-text-muted)] underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-[color:var(--color-accent-fg)]"
-        >
-          Docs ↗
-        </a>
+          <span className="ml-2 inline-flex items-center rounded-full border border-[color:var(--color-hairline)] bg-white/[0.02] px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.16em] text-[color:var(--color-text-subtle)]">
+            {agent.productTag}
+          </span>
+          <a
+            href={agent.docsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 text-[11px] text-[color:var(--color-text-muted)] underline decoration-[color:var(--color-text-subtle)] underline-offset-2 hover:text-[color:var(--color-accent-fg)]"
+          >
+            Docs ↗
+          </a>
+        </span>
       </header>
 
       <p

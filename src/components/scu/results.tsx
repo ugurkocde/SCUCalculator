@@ -238,7 +238,7 @@ export const CalculatorResults = ({
           href="/value"
           className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2 hover:decoration-[color:var(--color-accent)]"
         >
-          See what teams report they get back
+          See how much each agent saves
         </Link>
         .
       </p>

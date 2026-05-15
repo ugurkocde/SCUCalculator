@@ -72,7 +72,7 @@ export default function HomePage() {
             href="/value"
             className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2"
           >
-            See what teams report they save
+            See how much each agent could save your team
           </Link>{" "}
           before you calculate the cost.
         </p>

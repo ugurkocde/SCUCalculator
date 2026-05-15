@@ -211,8 +211,13 @@ export default async function BenchmarkPage() {
             <Link href="/" className="underline">
               Use the calculator
             </Link>{" "}
-            and click <em>Share your SCU usage</em>. No tenant identifiers, IP
-            address, or raw user agent are stored. Machine-readable export:{" "}
+            and click <em>Share your SCU usage</em>. Looking for the value
+            side?{" "}
+            <Link href="/value" className="underline">
+              Community value
+            </Link>
+            . No tenant identifiers, IP address, or raw user agent are stored.
+            Machine-readable export:{" "}
             <a href="/benchmark.json" className="underline">
               /benchmark.json
             </a>

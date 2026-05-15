@@ -9,6 +9,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { href: "/", label: "Calculator" },
+  { href: "/value", label: "Value" },
   { href: "/agents", label: "Agents" },
   { href: "/methodology", label: "Methodology" },
   { href: "/faq", label: "FAQ" },

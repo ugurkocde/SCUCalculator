@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { type ReactNode } from "react";
 
 import { AnimatedNumber } from "~/components/scu/animated-number";
@@ -230,6 +231,17 @@ export const CalculatorResults = ({
           {fxWarning}
         </p>
       ) : null}
+
+      <p className="border-t border-[color:var(--color-hairline)] px-6 py-3 text-[12px] text-[color:var(--color-text-muted)]">
+        Is it worth it?{" "}
+        <Link
+          href="/value"
+          className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2 hover:decoration-[color:var(--color-accent)]"
+        >
+          See what teams report they get back
+        </Link>
+        .
+      </p>
 
       <p className="border-t border-[color:var(--color-hairline)] px-6 py-3 text-[11px] text-[color:var(--color-text-subtle)]">
         Planning estimate. Verify at{" "}

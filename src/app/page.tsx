@@ -66,6 +66,16 @@ export default function HomePage() {
       </section>
 
       <div className="mx-auto w-full max-w-6xl space-y-10">
+        <p className="text-center text-sm text-[color:var(--color-text-muted)]">
+          New to Security Copilot?{" "}
+          <Link
+            href="/value"
+            className="text-[color:var(--color-accent-fg)] underline decoration-[color:var(--color-accent)]/40 underline-offset-2"
+          >
+            See what teams report they save
+          </Link>{" "}
+          before you calculate the cost.
+        </p>
         <CalculatorShell />
 
         <section

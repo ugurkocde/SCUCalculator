@@ -76,15 +76,38 @@ const isDuplicateError = (error: unknown): boolean => {
   );
 };
 
+type PaidUserBand =
+  | "1_249"
+  | "250_999"
+  | "1000_4999"
+  | "5000_24999"
+  | "25000_plus";
+
+const derivePaidUserBand = (licensedUsers: number): PaidUserBand | null => {
+  if (!Number.isFinite(licensedUsers) || licensedUsers < 1) return null;
+  if (licensedUsers < 250) return "1_249";
+  if (licensedUsers < 1000) return "250_999";
+  if (licensedUsers < 5000) return "1000_4999";
+  if (licensedUsers < 25000) return "5000_24999";
+  return "25000_plus";
+};
+
 const buildDuplicateFingerprint = (
   submission: AnonymousSubmissionRequest,
+  paidUserBand: PaidUserBand | null,
+  computedMonthlyUsd: number,
 ): string => {
   const fingerprintPayload = {
     formulaVersion: SCU_FORMULA_VERSION,
-    input: submission.input,
+    licensedUsers: submission.input.e5PaidUserLicenses,
+    licenseTier: submission.input.licenseTier,
+    agentCount: submission.input.agentCount,
+    messagesPerWorkday: submission.input.messagesPerWorkday,
     observedMonthlyScu: submission.observedMonthlyScu ?? null,
     observedMonthlyCostUsd: submission.observedMonthlyCostUsd ?? null,
-    environment: submission.environment,
+    regionBand: submission.environment.regionBand ?? null,
+    paidUserBand,
+    computedMonthlyUsd,
     consentVersion: submission.consentVersion,
   };
 
@@ -95,9 +118,7 @@ const buildDuplicateFingerprint = (
 
 const hasJsonContentType = (request: Request): boolean => {
   const header = request.headers.get("content-type");
-  if (!header) {
-    return false;
-  }
+  if (!header) return false;
   const mediaType = header.split(";")[0]?.trim().toLowerCase() ?? "";
   return mediaType === "application/json";
 };
@@ -153,8 +174,14 @@ export const POST = async (request: Request): Promise<Response> => {
 
   const submission = parsed.data;
   const computedOutput = calculateScuEstimate(submission.input);
+  const computedMonthlyUsd = computedOutput.monthlyUsd;
   const userAgentHash = hashUserAgent(request.headers.get("user-agent"));
-  const duplicateFingerprint = buildDuplicateFingerprint(submission);
+  const paidUserBand = derivePaidUserBand(submission.input.e5PaidUserLicenses);
+  const duplicateFingerprint = buildDuplicateFingerprint(
+    submission,
+    paidUserBand,
+    computedMonthlyUsd,
+  );
 
   let supabase: ReturnType<typeof createSupabaseServiceRoleClient>;
   try {
@@ -171,11 +198,15 @@ export const POST = async (request: Request): Promise<Response> => {
     .from("anonymous_submissions")
     .insert({
       formula_version: SCU_FORMULA_VERSION,
-      calculator_input: submission.input,
-      computed_output: computedOutput,
+      licensed_users: Math.round(submission.input.e5PaidUserLicenses),
+      license_tier: submission.input.licenseTier,
+      agent_count: Math.round(submission.input.agentCount),
+      messages_per_workday: Math.round(submission.input.messagesPerWorkday),
       observed_monthly_scu: submission.observedMonthlyScu ?? null,
       observed_monthly_cost_usd: submission.observedMonthlyCostUsd ?? null,
-      environment: submission.environment,
+      region_band: submission.environment.regionBand ?? null,
+      paid_user_band: paidUserBand,
+      computed_monthly_usd: computedMonthlyUsd,
       consent_version: submission.consentVersion,
       source: "web",
       user_agent_hash: userAgentHash,

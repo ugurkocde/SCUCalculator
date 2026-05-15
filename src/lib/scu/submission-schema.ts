@@ -68,31 +68,6 @@ const calculatorInputSchema = z
 
 export const submissionEnvironmentSchema = z
   .object({
-    organizationSizeBand: z
-      .enum([
-        "1_249",
-        "250_999",
-        "1000_4999",
-        "5000_24999",
-        "25000_plus",
-        "unknown",
-      ])
-      .optional(),
-    securityTeamSizeBand: z
-      .enum(["1_5", "6_20", "21_50", "51_200", "200_plus", "unknown"])
-      .optional(),
-    region: z
-      .enum([
-        "north_america",
-        "europe",
-        "asia_pacific",
-        "latin_america",
-        "middle_east_africa",
-        "global",
-        "global_multi_region",
-        "unknown",
-      ])
-      .optional(),
     regionBand: z
       .enum([
         "north_america",
@@ -102,73 +77,6 @@ export const submissionEnvironmentSchema = z
         "middle_east_africa",
         "global_multi_region",
       ])
-      .optional(),
-    cloud: z
-      .enum(["commercial", "gcc", "gcc_high", "dod", "other", "unknown"])
-      .optional(),
-    industry: z
-      .enum([
-        "education",
-        "energy",
-        "financial_services",
-        "government",
-        "healthcare",
-        "manufacturing",
-        "other_commercial",
-        "other_regulated",
-        "public_sector",
-        "retail",
-        "technology",
-        "other",
-        "unknown",
-      ])
-      .optional(),
-    industryCategory: z
-      .enum([
-        "education",
-        "financial_services",
-        "healthcare",
-        "manufacturing",
-        "other_commercial",
-        "other_regulated",
-        "public_sector",
-        "retail",
-        "technology",
-      ])
-      .optional(),
-    paidUserBand: z
-      .enum(["1_249", "250_999", "1000_4999", "5000_24999", "25000_plus"])
-      .optional(),
-    activeAdminBand: z
-      .enum(["1_4", "5_14", "15_49", "50_199", "200_plus"])
-      .optional(),
-    productsUsed: z
-      .array(
-        z.enum([
-          "defender_xdr",
-          "entra",
-          "intune",
-          "purview",
-          "security_copilot_portal",
-          "sentinel",
-        ]),
-      )
-      .max(12)
-      .optional(),
-    agentCategories: z
-      .array(
-        z.enum([
-          "automation_playbooks",
-          "custom_agents",
-          "microsoft_first_party",
-          "none_unsure",
-          "partner_agents",
-        ]),
-      )
-      .max(12)
-      .optional(),
-    deploymentStage: z
-      .enum(["evaluating", "pilot", "production", "expanding", "unknown"])
       .optional(),
   })
   .strict();

@@ -31,32 +31,17 @@ const regionOptions = [
   { value: "global_multi_region", label: "Global or multi-region" },
 ] as const satisfies readonly Option[];
 
-const paidUserBandOptions = [
-  unknownOption,
-  { value: "1_249", label: "1-249" },
-  { value: "250_999", label: "250-999" },
-  { value: "1000_4999", label: "1,000-4,999" },
-  { value: "5000_24999", label: "5,000-24,999" },
-  { value: "25000_plus", label: "25,000+" },
-] as const satisfies readonly Option[];
-
 type RegionBand = Exclude<
   (typeof regionOptions)[number]["value"],
-  typeof UNKNOWN_VALUE
->;
-type PaidUserBand = Exclude<
-  (typeof paidUserBandOptions)[number]["value"],
   typeof UNKNOWN_VALUE
 >;
 
 interface AnonymousSubmissionFormState {
   regionBand: UnknownOr<RegionBand>;
-  paidUserBand: UnknownOr<PaidUserBand>;
 }
 
 interface SubmissionEnvironmentPayload {
   regionBand?: RegionBand;
-  paidUserBand?: PaidUserBand;
 }
 
 interface AnonymousSubmissionPayload {
@@ -77,7 +62,6 @@ interface AnonymousSubmissionDialogProps {
 
 const initialFormState: AnonymousSubmissionFormState = {
   regionBand: UNKNOWN_VALUE,
-  paidUserBand: UNKNOWN_VALUE,
 };
 
 const labelClass =
@@ -103,9 +87,6 @@ const buildEnvironmentPayload = (
 
   if (form.regionBand !== UNKNOWN_VALUE) {
     environment.regionBand = form.regionBand;
-  }
-  if (form.paidUserBand !== UNKNOWN_VALUE) {
-    environment.paidUserBand = form.paidUserBand;
   }
 
   return environment;
@@ -404,47 +385,25 @@ export const AnonymousSubmissionDialog = ({
                 />
               </label>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <label className="block">
-                  <span className={labelClass}>Paid users</span>
-                  <select
-                    value={form.paidUserBand}
-                    onChange={(event) => {
-                      setForm((current) => ({
-                        ...current,
-                        paidUserBand: event.target
-                          .value as UnknownOr<PaidUserBand>,
-                      }));
-                    }}
-                    className={fieldClass}
-                  >
-                    {paidUserBandOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className={labelClass}>Region</span>
-                  <select
-                    value={form.regionBand}
-                    onChange={(event) => {
-                      setForm((current) => ({
-                        ...current,
-                        regionBand: event.target.value as UnknownOr<RegionBand>,
-                      }));
-                    }}
-                    className={fieldClass}
-                  >
-                    {regionOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+              <label className="block">
+                <span className={labelClass}>Region</span>
+                <select
+                  value={form.regionBand}
+                  onChange={(event) => {
+                    setForm((current) => ({
+                      ...current,
+                      regionBand: event.target.value as UnknownOr<RegionBand>,
+                    }));
+                  }}
+                  className={fieldClass}
+                >
+                  {regionOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
               <p className="text-[11px] leading-5 text-[color:var(--color-text-subtle)]">
                 No email, tenant ID, company name, domain, free-text notes,

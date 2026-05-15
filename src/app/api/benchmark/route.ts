@@ -73,7 +73,7 @@ export const GET = async (request: Request): Promise<Response> => {
     .select("observed_monthly_scu, observed_monthly_cost_usd");
 
   if (paidUserBand) {
-    query = query.filter("environment->>paidUserBand", "eq", paidUserBand);
+    query = query.eq("paid_user_band", paidUserBand);
   }
 
   const { data, error } = await query

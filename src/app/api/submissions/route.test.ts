@@ -37,18 +37,17 @@ const jsonRequest = (body: unknown, init?: RequestInit): Request => {
 const validPayload = {
   input: {
     ...DEFAULT_INPUT,
+    e5PaidUserLicenses: 1500,
+    licenseTier: "e5_security" as const,
+    agentCount: 3,
+    messagesPerWorkday: 8,
     estimatorMode: "direct" as const,
     consumedScuPerHour: 9,
   },
   observedMonthlyScu: 1200,
   observedMonthlyCostUsd: 7200,
   environment: {
-    organizationSizeBand: "1000_4999",
-    securityTeamSizeBand: "21_50",
-    cloud: "commercial",
-    deploymentStage: "pilot",
-    industry: "technology",
-    region: "europe",
+    regionBand: "europe" as const,
   },
   consentAccepted: true,
   consentVersion: "anonymous-submissions-v1",
@@ -60,7 +59,7 @@ describe("POST /api/submissions", () => {
     supabaseMocks.singleMock.mockReset();
   });
 
-  it("recomputes output server-side and inserts the expected anonymous payload", async () => {
+  it("writes the slim signal columns and recomputes computed_monthly_usd server-side", async () => {
     supabaseMocks.singleMock.mockResolvedValueOnce({
       data: { id: "submission-1" },
       error: null,
@@ -77,31 +76,75 @@ describe("POST /api/submissions", () => {
     const insertCalls = supabaseMocks.insertMock.mock.calls as unknown as Array<
       [Record<string, unknown>]
     >;
-    const insertedRows = insertCalls[0]?.[0];
-    expect(insertedRows).toBeDefined();
-    if (!insertedRows) {
+    const insertedRow = insertCalls[0]?.[0];
+    expect(insertedRow).toBeDefined();
+    if (!insertedRow) {
       throw new Error("Expected route to insert a submission row.");
     }
-    expect(insertedRows).toMatchObject({
-      calculator_input: validPayload.input,
+
+    expect(insertedRow).toMatchObject({
+      licensed_users: 1500,
+      license_tier: "e5_security",
+      agent_count: 3,
+      messages_per_workday: 8,
       observed_monthly_scu: 1200,
       observed_monthly_cost_usd: 7200,
-      environment: validPayload.environment,
+      region_band: "europe",
+      paid_user_band: "1000_4999",
       consent_version: "anonymous-submissions-v1",
       source: "web",
     });
-    expect(insertedRows.duplicate_fingerprint).toEqual(expect.any(String));
-    expect(insertedRows.user_agent_hash).toBeNull();
-    expect(insertedRows).not.toHaveProperty("email");
-    expect(insertedRows).not.toHaveProperty("tenantId");
-    expect(insertedRows).not.toHaveProperty("companyName");
-    expect(insertedRows).not.toHaveProperty("domain");
-    expect(insertedRows).not.toHaveProperty("notes");
-    expect(insertedRows.computed_output).toEqual(
-      calculateScuEstimate(validPayload.input),
+    expect(insertedRow.computed_monthly_usd).toBeCloseTo(
+      calculateScuEstimate(validPayload.input).monthlyUsd,
+      5,
     );
+    expect(insertedRow.duplicate_fingerprint).toEqual(expect.any(String));
+    expect(insertedRow.user_agent_hash).toBeNull();
+    expect(insertedRow).not.toHaveProperty("calculator_input");
+    expect(insertedRow).not.toHaveProperty("computed_output");
+    expect(insertedRow).not.toHaveProperty("environment");
+    expect(insertedRow).not.toHaveProperty("email");
+    expect(insertedRow).not.toHaveProperty("tenantId");
+    expect(insertedRow).not.toHaveProperty("companyName");
+    expect(insertedRow).not.toHaveProperty("domain");
+    expect(insertedRow).not.toHaveProperty("notes");
     expect(supabaseMocks.selectMock).toHaveBeenCalledWith("id");
     expect(supabaseMocks.singleMock).toHaveBeenCalled();
+  });
+
+  it("derives paid_user_band server-side across all size brackets", async () => {
+    const brackets: Array<[number, string | null]> = [
+      [0, null],
+      [50, "1_249"],
+      [500, "250_999"],
+      [2500, "1000_4999"],
+      [10000, "5000_24999"],
+      [30000, "25000_plus"],
+    ];
+
+    const { POST } = await import("~/app/api/submissions/route");
+
+    for (const [licenses, expectedBand] of brackets) {
+      supabaseMocks.singleMock.mockResolvedValueOnce({
+        data: { id: `submission-${licenses}` },
+        error: null,
+      });
+
+      const response = await POST(
+        jsonRequest({
+          ...validPayload,
+          input: { ...validPayload.input, e5PaidUserLicenses: licenses },
+          observedMonthlyScu: 1000 + licenses,
+        }),
+      );
+
+      expect(response.status).toBe(201);
+      const insertCalls = supabaseMocks.insertMock.mock.calls as unknown as Array<
+        [Record<string, unknown>]
+      >;
+      const lastRow = insertCalls[insertCalls.length - 1]?.[0];
+      expect(lastRow?.paid_user_band).toBe(expectedBand);
+    }
   });
 
   it("rejects requests without an application/json Content-Type", async () => {
@@ -188,11 +231,11 @@ describe("POST /api/submissions", () => {
     const insertCalls = supabaseMocks.insertMock.mock.calls as unknown as Array<
       [Record<string, unknown>]
     >;
-    const insertedRows = insertCalls[0]?.[0];
-    expect(insertedRows?.user_agent_hash).toEqual(expect.any(String));
-    expect(insertedRows?.user_agent_hash).not.toBe("Raw Browser 1.0");
-    expect(insertedRows).not.toHaveProperty("ip");
-    expect(insertedRows).not.toHaveProperty("user_agent");
+    const insertedRow = insertCalls[0]?.[0];
+    expect(insertedRow?.user_agent_hash).toEqual(expect.any(String));
+    expect(insertedRow?.user_agent_hash).not.toBe("Raw Browser 1.0");
+    expect(insertedRow).not.toHaveProperty("ip");
+    expect(insertedRow).not.toHaveProperty("user_agent");
   });
 
   it("maps duplicate database errors to a duplicate submission response", async () => {

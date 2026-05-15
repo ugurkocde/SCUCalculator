@@ -11,12 +11,7 @@ const validSubmission = () => ({
   observedMonthlyScu: 1200,
   observedMonthlyCostUsd: null,
   environment: {
-    organizationSizeBand: "1000_4999",
-    securityTeamSizeBand: "21_50",
-    region: "europe",
-    cloud: "commercial",
-    industry: "technology",
-    deploymentStage: "pilot",
+    regionBand: "europe" as const,
   },
   consentAccepted: true,
   consentVersion: "anonymous-submissions-v1",
@@ -26,6 +21,15 @@ describe("anonymousSubmissionRequestSchema", () => {
   it("accepts the anonymous submission contract", () => {
     const parsed =
       anonymousSubmissionRequestSchema.safeParse(validSubmission());
+
+    expect(parsed.success).toBe(true);
+  });
+
+  it("accepts an empty environment when no region was selected", () => {
+    const parsed = anonymousSubmissionRequestSchema.safeParse({
+      ...validSubmission(),
+      environment: {},
+    });
 
     expect(parsed.success).toBe(true);
   });
@@ -65,27 +69,23 @@ describe("anonymousSubmissionRequestSchema", () => {
       ...validSubmission(),
       environment: {
         ...validSubmission().environment,
-        customLabel: "anything",
+        industry: "technology",
       },
     });
 
     expect(parsed.success).toBe(false);
   });
 
-  it("accepts the controlled environment shape sent by the UI", () => {
+  it("rejects client-supplied paidUserBand (server-derived only)", () => {
     const parsed = anonymousSubmissionRequestSchema.safeParse({
       ...validSubmission(),
       environment: {
         regionBand: "north_america",
-        industryCategory: "technology",
         paidUserBand: "1000_4999",
-        activeAdminBand: "5_14",
-        productsUsed: ["sentinel"],
-        agentCategories: ["microsoft_first_party"],
       },
     });
 
-    expect(parsed.success).toBe(true);
+    expect(parsed.success).toBe(false);
   });
 
   it("rejects client-supplied duplicate fingerprints", () => {

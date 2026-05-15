@@ -3,17 +3,17 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const supabaseMocks = vi.hoisted(() => {
   const limitMock = vi.fn();
   const orderMock = vi.fn(() => ({ limit: limitMock }));
-  type Builder = { filter: ReturnType<typeof vi.fn>; order: typeof orderMock };
-  const filterMock = vi.fn();
-  const builder: Builder = { filter: filterMock, order: orderMock };
-  filterMock.mockImplementation(() => builder);
+  type Builder = { eq: ReturnType<typeof vi.fn>; order: typeof orderMock };
+  const eqMock = vi.fn();
+  const builder: Builder = { eq: eqMock, order: orderMock };
+  eqMock.mockImplementation(() => builder);
   const selectMock = vi.fn(() => builder);
   const fromMock = vi.fn(() => ({ select: selectMock }));
   const createSupabaseServiceRoleClientMock = vi.fn(() => ({ from: fromMock }));
 
   return {
     createSupabaseServiceRoleClientMock,
-    filterMock,
+    eqMock,
     fromMock,
     limitMock,
     orderMock,
@@ -57,9 +57,8 @@ describe("GET /api/benchmark", () => {
       medianScu: 1400,
       medianCostUsd: 8400,
     });
-    expect(supabaseMocks.filterMock).toHaveBeenCalledWith(
-      "environment->>paidUserBand",
-      "eq",
+    expect(supabaseMocks.eqMock).toHaveBeenCalledWith(
+      "paid_user_band",
       "1000_4999",
     );
   });
@@ -119,6 +118,6 @@ describe("GET /api/benchmark", () => {
       medianScu: 200,
       medianCostUsd: 1500,
     });
-    expect(supabaseMocks.filterMock).not.toHaveBeenCalled();
+    expect(supabaseMocks.eqMock).not.toHaveBeenCalled();
   });
 });
